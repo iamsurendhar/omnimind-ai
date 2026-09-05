@@ -1,6 +1,8 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
+const fs = require("fs");
 
 const app = express();
 
@@ -10,6 +12,7 @@ app.use(express.urlencoded({ extended: true }));
 
 let activeChatModels = [];
 
+// Discover active text chat models from Groq
 async function loadAvailableChatModels() {
   const apiKey = (process.env.GROQ_API_KEY || "").trim();
   if (!apiKey || apiKey.includes("your_")) return;
@@ -56,11 +59,40 @@ async function loadAvailableChatModels() {
 
 loadAvailableChatModels();
 
-app.get("/api/models", async (req, res) => {
-  if (activeChatModels.length === 0) await loadAvailableChatModels();
-  res.json({ models: activeChatModels });
+// 1. ROOT ROUTE: Serves index.html directly from Express on Vercel
+app.get("/", (req, res) => {
+  const rootPath = path.join(process.cwd(), "index.html");
+  if (fs.existsSync(rootPath)) {
+    res.setHeader("Content-Type", "text/html; charset=utf-8");
+    return res.sendFile(rootPath);
+  }
+
+  const altPath = path.join(__dirname, "..", "index.html");
+  if (fs.existsSync(altPath)) {
+    res.setHeader("Content-Type", "text/html; charset=utf-8");
+    return res.sendFile(altPath);
+  }
+
+  const localPath = path.join(__dirname, "index.html");
+  if (fs.existsSync(localPath)) {
+    res.setHeader("Content-Type", "text/html; charset=utf-8");
+    return res.sendFile(localPath);
+  }
+
+  res.status(404).send("Error: index.html not found in project directory.");
 });
 
+// 2. Models Endpoint
+app.get("/api/models", async (req, res) => {
+  if (activeChatModels.length === 0) {
+    await loadAvailableChatModels();
+  }
+  res.json({
+    models: activeChatModels,
+  });
+});
+
+// 3. Configuration Endpoint
 app.get("/api/config", (req, res) => {
   const defaultModel = activeChatModels[0] || "qwen/qwen3.6-27b";
   res.json({
@@ -71,15 +103,16 @@ app.get("/api/config", (req, res) => {
   });
 });
 
+// 4. Chat Endpoint
 app.post("/api/chat", async (req, res) => {
   try {
     const { messages, model } = req.body;
     const apiKey = (process.env.GROQ_API_KEY || "").trim();
 
     if (!apiKey || apiKey.includes("your_")) {
-      return res
-        .status(500)
-        .json({ error: "Missing Groq API Key in environment variables." });
+      return res.status(500).json({
+        error: "Missing Groq API Key in environment variables.",
+      });
     }
 
     let targetModel = model;
@@ -106,18 +139,27 @@ app.post("/api/chat", async (req, res) => {
     );
 
     const data = await response.json();
+
     if (!response.ok) {
-      return res
-        .status(response.status)
-        .json({ error: data.error?.message || "Error from AI service." });
+      return res.status(response.status).json({
+        error: data.error?.message || "Error from AI service.",
+      });
     }
 
     res.json(data);
   } catch (error) {
-    res
-      .status(500)
-      .json({ error: "Something went wrong. Please try again later." });
+    res.status(500).json({
+      error: "Something went wrong. Please try again later.",
+    });
   }
 });
+
+// For Local run
+if (process.env.NODE_ENV !== "production" || !process.env.VERCEL) {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, async () => {
+    await loadAvailableChatModels();
+  });
+}
 
 module.exports = app;
