@@ -1,0 +1,1846 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+
+    <title>OmniMind AI — Intelligent Assistant</title>
+    <meta name="title" content="OmniMind AI — Intelligent Assistant" />
+    <meta
+      name="description"
+      content="OmniMind AI delivers high-performance prompt generation and state-of-the-art AI intelligence."
+    />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#171717" />
+
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2310b981' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polygon points='12 2 22 8.5 22 15.5 12 22 2 15.5 12 2'/><circle cx='12' cy='12' r='3'/></svg>"
+    />
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              darkSidebar: "#171717",
+              darkBg: "#212121",
+              darkInput: "#2f2f2f",
+              darkHover: "#2a2a2a",
+              lightSidebar: "#f9f9f9",
+              lightBg: "#ffffff",
+              lightInput: "#f4f4f4",
+              lightHover: "#ececec",
+            },
+          },
+        },
+      };
+    </script>
+
+    <!-- Highlight.js & Marked.js -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <!-- jQuery & Feather Icons -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+
+    <!-- Complete Inlined Styles (Guarantees zero stylesheet 404s on Vercel) -->
+    <style>
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .dark ::-webkit-scrollbar-thumb {
+        background: #3f3f46;
+        border-radius: 9999px;
+      }
+      .dark ::-webkit-scrollbar-thumb:hover {
+        background: #52525b;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #d4d4d8;
+        border-radius: 9999px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #a1a1aa;
+      }
+
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overscroll-behavior: none;
+      }
+
+      .msg-ai-body {
+        color: inherit;
+        line-height: 1.65;
+        font-size: 0.88rem;
+      }
+      .msg-ai-body p {
+        margin-bottom: 0.85rem;
+        line-height: 1.65;
+      }
+      .msg-ai-body p:last-child {
+        margin-bottom: 0;
+      }
+      .msg-ai-body ul {
+        list-style-type: disc;
+        margin: 0.5rem 0 0.85rem 1.4rem;
+      }
+      .msg-ai-body ol {
+        list-style-type: decimal;
+        margin: 0.5rem 0 0.85rem 1.4rem;
+      }
+      .msg-ai-body li {
+        margin-bottom: 0.35rem;
+        line-height: 1.6;
+      }
+      .msg-ai-body strong {
+        font-weight: 600;
+      }
+
+      .msg-ai-body table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 0.85rem 0;
+        font-size: 0.82rem;
+        border-radius: 0.5rem;
+        overflow: hidden;
+      }
+      .msg-ai-body th,
+      .msg-ai-body td {
+        padding: 0.5rem 0.75rem;
+        border: 1px solid #d4d4d8;
+        text-align: left;
+      }
+      .dark .msg-ai-body th,
+      .dark .msg-ai-body td {
+        border: 1px solid #3f3f46;
+      }
+      .msg-ai-body th {
+        background-color: #f4f4f5;
+        color: #18181b;
+        font-weight: 600;
+      }
+      .dark .msg-ai-body th {
+        background-color: #27272a;
+        color: #f4f4f5;
+      }
+
+      .code-container {
+        width: 100%;
+        margin: 0.85rem 0;
+        border-radius: 0.85rem;
+        overflow: hidden;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e4e4e7;
+        background-color: #f8fafc;
+      }
+      .dark .code-container {
+        border: 1px solid #27272a;
+        background-color: #0d1117;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+      }
+      .code-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.45rem 1rem;
+        background-color: #f1f5f9;
+        border-bottom: 1px solid #e2e8f0;
+        user-select: none;
+      }
+      .dark .code-header {
+        background-color: #161b22;
+        border-bottom: 1px solid #30363d;
+      }
+
+      .code-action-icon-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.35rem;
+        border-radius: 0.4rem;
+        color: #64748b;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+      .dark .code-action-icon-btn {
+        color: #94a3b8;
+      }
+      .code-action-icon-btn:hover {
+        background-color: #e2e8f0;
+        color: #0f172a;
+      }
+      .dark .code-action-icon-btn:hover {
+        background-color: #2e2e2e;
+        color: #ffffff;
+      }
+
+      pre,
+      code,
+      .code-container pre,
+      .code-container code {
+        text-transform: none !important;
+        font-variant: normal !important;
+        font-family:
+          ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+      }
+      .code-container pre.code-content-block {
+        margin: 0 !important;
+        padding: 1rem !important;
+        font-size: 0.82rem !important;
+        line-height: 1.55 !important;
+        background-color: #f8fafc !important;
+        color: #0f172a !important;
+        overflow-x: auto !important;
+        overflow-y: visible !important;
+        max-height: none !important;
+        height: auto !important;
+        white-space: pre !important;
+      }
+      .dark .code-container pre.code-content-block {
+        background-color: #0d1117 !important;
+        color: #e2e8f0 !important;
+      }
+      .code-container code {
+        display: block !important;
+        overflow: visible !important;
+      }
+      .rotate-180 {
+        transform: rotate(180deg);
+      }
+
+      textarea {
+        scrollbar-width: none;
+      }
+      textarea::-webkit-scrollbar {
+        display: none;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-lightBg dark:bg-darkBg text-zinc-900 dark:text-gray-100 flex h-screen overflow-hidden font-sans antialiased transition-colors duration-200"
+  >
+    <!-- Mobile Backdrop Overlay -->
+    <div
+      id="sidebar-overlay"
+      class="fixed inset-0 bg-black/60 z-40 hidden md:hidden backdrop-blur-sm transition-opacity"
+    ></div>
+
+    <!-- Left Sidebar -->
+    <aside
+      id="sidebar"
+      class="fixed inset-y-0 left-0 z-50 w-72 md:w-64 bg-lightSidebar dark:bg-darkSidebar flex flex-col justify-between border-r border-zinc-200 dark:border-zinc-800 transform -translate-x-full md:relative md:translate-x-0 transition-all duration-300 ease-in-out shrink-0"
+    >
+      <div class="p-3 flex flex-col h-full relative">
+        <!-- Brand Header -->
+        <div class="flex items-center justify-between mb-3 px-2 pt-1">
+          <div class="flex items-center gap-2">
+            <div
+              class="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-500"
+            >
+              <svg
+                class="w-4 h-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 12 2" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+            </div>
+            <span
+              id="brand-name"
+              class="text-sm font-semibold tracking-wide text-zinc-800 dark:text-zinc-100"
+              >OmniMind AI</span
+            >
+          </div>
+
+          <div class="flex items-center gap-1">
+            <button
+              id="new-chat-top-btn"
+              title="New Chat"
+              class="p-2 hover:bg-lightHover dark:hover:bg-darkHover rounded-lg text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-white transition"
+            >
+              <i data-feather="edit" class="w-4 h-4"></i>
+            </button>
+            <button
+              id="close-sidebar-btn"
+              title="Close Sidebar"
+              class="p-2 hover:bg-lightHover dark:hover:bg-darkHover rounded-lg text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-white md:hidden transition"
+            >
+              <i data-feather="x" class="w-5 h-5"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- New Chat Button -->
+        <button
+          id="new-chat-btn"
+          class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm bg-zinc-200 dark:bg-zinc-800/80 hover:bg-zinc-300 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-100 transition mb-3 border border-zinc-300 dark:border-zinc-700/60 w-full text-left font-medium shadow-sm"
+        >
+          <i
+            data-feather="plus"
+            class="w-4 h-4 text-zinc-600 dark:text-zinc-300"
+          ></i>
+          <span data-i18n="new_chat">New chat</span>
+        </button>
+
+        <!-- History Header -->
+        <div
+          class="text-[11px] font-semibold text-zinc-400 dark:text-zinc-500 px-3 py-1 uppercase tracking-wider"
+          data-i18n="conversations"
+        >
+          Conversations
+        </div>
+
+        <!-- Dynamic Chat List -->
+        <div
+          id="chat-list"
+          class="flex-1 overflow-y-auto space-y-1 py-1 text-sm text-zinc-700 dark:text-zinc-300"
+        ></div>
+
+        <!-- User Profile Dropdown -->
+        <div
+          id="profile-dropdown-container"
+          class="relative pt-2 border-t border-zinc-200 dark:border-zinc-800 mt-auto"
+        >
+          <div
+            id="profile-btn"
+            class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-lightHover dark:hover:bg-darkHover cursor-pointer transition select-none"
+          >
+            <div
+              class="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center font-bold text-xs text-white"
+            >
+              U
+            </div>
+            <div class="flex-1 truncate">
+              <p
+                class="text-sm font-medium text-zinc-800 dark:text-white truncate"
+              >
+                User Account
+              </p>
+            </div>
+            <i
+              data-feather="more-horizontal"
+              class="w-4 h-4 text-zinc-500 dark:text-zinc-400"
+            ></i>
+          </div>
+
+          <div
+            id="profile-menu"
+            class="hidden absolute bottom-14 left-2 right-2 bg-white dark:bg-[#262626] border border-zinc-200 dark:border-zinc-700/80 rounded-2xl shadow-2xl p-1.5 space-y-0.5 z-50"
+          >
+            <button
+              id="open-personalization-btn"
+              class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-700/60 text-xs font-medium text-zinc-800 dark:text-zinc-200 transition"
+            >
+              <i data-feather="sliders" class="w-4 h-4 text-zinc-400"></i>
+              <span data-i18n="personalization">Personalization</span>
+            </button>
+            <button
+              id="open-profile-btn"
+              class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-700/60 text-xs font-medium text-zinc-800 dark:text-zinc-200 transition"
+            >
+              <i data-feather="user" class="w-4 h-4 text-zinc-400"></i>
+              <span data-i18n="profile">Profile</span>
+            </button>
+            <button
+              id="open-settings-btn"
+              class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-700/60 text-xs font-medium text-zinc-800 dark:text-zinc-200 transition"
+            >
+              <i data-feather="settings" class="w-4 h-4 text-zinc-400"></i>
+              <span data-i18n="settings">Settings</span>
+            </button>
+            <div
+              class="border-t border-zinc-200 dark:border-zinc-700 my-1"
+            ></div>
+            <button
+              id="open-help-btn"
+              class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-700/60 text-xs font-medium text-zinc-800 dark:text-zinc-200 transition"
+            >
+              <div class="flex items-center gap-3">
+                <i data-feather="help-circle" class="w-4 h-4 text-zinc-400"></i>
+                <span data-i18n="help">Help</span>
+              </div>
+              <i
+                data-feather="chevron-right"
+                class="w-3.5 h-3.5 text-zinc-400"
+              ></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Chat Workspace -->
+    <main
+      class="flex-1 flex flex-col h-full w-full relative overflow-hidden bg-lightBg dark:bg-darkBg"
+    >
+      <!-- Top Header -->
+      <header
+        class="h-14 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between px-3 md:px-4 bg-lightBg/90 dark:bg-darkBg/90 backdrop-blur z-20"
+      >
+        <div class="flex items-center gap-1.5 md:gap-2">
+          <button
+            id="toggle-sidebar"
+            class="p-2 hover:bg-lightHover dark:hover:bg-darkHover rounded-lg text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-white transition"
+            title="Toggle Sidebar"
+          >
+            <i data-feather="menu" class="w-5 h-5 md:hidden"></i>
+            <i data-feather="sidebar" class="w-5 h-5 hidden md:block"></i>
+          </button>
+
+          <div id="model-dropdown-container" class="relative">
+            <button
+              id="model-btn"
+              class="font-semibold text-zinc-800 dark:text-zinc-200 text-sm flex items-center gap-1.5 cursor-pointer hover:bg-lightHover dark:hover:bg-darkHover px-2.5 py-1.5 rounded-lg transition select-none"
+            >
+              <span id="current-model-label">qwen3.6-27b</span>
+              <span
+                id="current-model-tag"
+                class="text-xs text-zinc-400 font-normal"
+                >Free / Groq</span
+              >
+              <i
+                data-feather="chevron-down"
+                class="w-3.5 h-3.5 text-zinc-400"
+              ></i>
+            </button>
+
+            <div
+              id="model-menu"
+              class="hidden absolute top-11 left-0 w-64 bg-white dark:bg-[#262626] border border-zinc-200 dark:border-zinc-700/80 rounded-2xl shadow-2xl p-2 space-y-1 z-50"
+            ></div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button
+            id="quick-settings-btn"
+            class="p-2 hover:bg-lightHover dark:hover:bg-darkHover rounded-lg text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-white transition"
+            title="Settings"
+          >
+            <i data-feather="settings" class="w-4 h-4"></i>
+          </button>
+          <button
+            id="mobile-new-chat-btn"
+            class="p-2 hover:bg-lightHover dark:hover:bg-darkHover rounded-lg text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-white md:hidden transition"
+          >
+            <i data-feather="edit" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </header>
+
+      <!-- Chat Area -->
+      <div class="flex-1 flex flex-col h-full overflow-hidden">
+        <div id="chat-stream" class="flex-1 overflow-y-auto px-4">
+          <!-- Welcome Hero State -->
+          <div
+            id="empty-state"
+            class="flex flex-col items-center justify-center min-h-[70vh] text-center max-w-2xl mx-auto py-8"
+          >
+            <div
+              class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mb-5 shadow-sm text-emerald-500"
+            >
+              <svg
+                class="w-6 h-6"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 12 2" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+            </div>
+            <h1
+              class="text-xl md:text-2xl font-semibold text-zinc-800 dark:text-zinc-100 mb-6"
+              data-i18n="hero_title"
+            >
+              What can I help with today?
+            </h1>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full text-left">
+              <button
+                class="prompt-chip p-3.5 rounded-2xl border border-zinc-200 dark:border-zinc-700/60 bg-lightInput dark:bg-darkInput/40 hover:bg-lightHover dark:hover:bg-darkInput transition text-xs text-zinc-700 dark:text-zinc-300"
+              >
+                <span
+                  class="font-medium text-zinc-900 dark:text-zinc-100 block mb-1"
+                  >Web Development</span
+                >
+                Create a modern responsive calculator with HTML, CSS, and JS
+              </button>
+              <button
+                class="prompt-chip p-3.5 rounded-2xl border border-zinc-200 dark:border-zinc-700/60 bg-lightInput dark:bg-darkInput/40 hover:bg-lightHover dark:hover:bg-darkInput transition text-xs text-zinc-700 dark:text-zinc-300"
+              >
+                <span
+                  class="font-medium text-zinc-900 dark:text-zinc-100 block mb-1"
+                  >Architecture Design</span
+                >
+                Design a scalable Node.js microservice architecture
+              </button>
+            </div>
+          </div>
+
+          <!-- Messages Container -->
+          <div
+            id="messages-container"
+            class="max-w-2xl mx-auto space-y-4 py-6 hidden"
+          ></div>
+        </div>
+
+        <!-- Floating Bottom Input Bar -->
+        <footer class="w-full max-w-2xl mx-auto px-4 pb-4">
+          <form
+            id="chat-form"
+            class="flex items-center gap-2 bg-lightInput dark:bg-darkInput rounded-3xl border border-zinc-300 dark:border-zinc-700/60 focus-within:border-zinc-400 dark:focus-within:border-zinc-500 shadow-sm dark:shadow-lg px-4 py-2 transition min-h-[52px]"
+          >
+            <textarea
+              id="user-input"
+              rows="1"
+              placeholder="Message OmniMind..."
+              data-i18n-placeholder="input_placeholder"
+              class="flex-1 bg-transparent text-sm text-zinc-800 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none resize-none leading-relaxed py-1.5 max-h-36 overflow-y-auto block"
+            ></textarea>
+
+            <button
+              type="button"
+              id="clear-input-btn"
+              class="hidden p-1 hover:text-zinc-800 dark:hover:text-zinc-100 text-zinc-400 transition my-auto"
+              title="Clear input"
+            >
+              <i data-feather="x" class="w-4 h-4"></i>
+            </button>
+
+            <button
+              type="submit"
+              id="send-btn"
+              disabled
+              class="w-8 h-8 rounded-full bg-black dark:bg-white disabled:bg-zinc-300 dark:disabled:bg-zinc-600 text-white dark:text-black disabled:text-zinc-500 dark:disabled:text-zinc-400 flex items-center justify-center shrink-0 transition disabled:cursor-not-allowed my-auto"
+            >
+              <i data-feather="arrow-up" class="w-4 h-4"></i>
+            </button>
+          </form>
+          <p
+            class="text-[11px] text-center text-zinc-500 mt-2"
+            data-i18n="disclaimer"
+          >
+            OmniMind AI can make mistakes. Verify important information.
+          </p>
+        </footer>
+      </div>
+    </main>
+
+    <!-- Live Browser Preview Modal -->
+    <div
+      id="live-preview-modal"
+      class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-3 md:p-6 hidden backdrop-blur-md"
+    >
+      <div
+        class="bg-[#18181b] border border-zinc-700 rounded-2xl w-full max-w-5xl h-[90vh] overflow-hidden shadow-2xl flex flex-col"
+      >
+        <div
+          class="h-12 border-b border-zinc-800 px-4 flex items-center justify-between bg-[#121214]"
+        >
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
+            <span
+              class="w-3 h-3 rounded-full bg-yellow-500 inline-block"
+            ></span>
+            <span class="w-3 h-3 rounded-full bg-green-500 inline-block"></span>
+            <span class="text-xs font-semibold text-zinc-300 ml-2"
+              >Live Web Preview</span
+            >
+          </div>
+          <div class="flex items-center gap-2">
+            <button
+              id="refresh-preview-btn"
+              class="px-2.5 py-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs rounded-lg flex items-center gap-1 transition"
+            >
+              <i data-feather="refresh-cw" class="w-3 h-3"></i>
+              <span>Refresh</span>
+            </button>
+            <button
+              class="close-modal-btn p-1.5 hover:bg-zinc-800 rounded-lg text-zinc-400 hover:text-white transition"
+            >
+              <i data-feather="x" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+        <div class="flex-1 bg-white overflow-hidden relative">
+          <iframe
+            id="live-preview-frame"
+            class="w-full h-full border-none"
+            sandbox="allow-scripts"
+          ></iframe>
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div
+      id="settings-modal"
+      class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 hidden backdrop-blur-sm"
+    >
+      <div
+        class="bg-white dark:bg-[#262626] border border-zinc-200 dark:border-zinc-700 rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl flex flex-col"
+      >
+        <div
+          class="flex items-center justify-between px-6 py-4 border-b border-zinc-200 dark:border-zinc-700"
+        >
+          <h2 class="text-base font-semibold" data-i18n="settings">Settings</h2>
+          <button
+            id="close-settings-btn"
+            class="p-1 hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded-lg text-zinc-400 hover:text-zinc-800 dark:hover:text-white transition"
+          >
+            <i data-feather="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <div class="p-6 space-y-5">
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <label
+                class="text-sm font-medium text-zinc-800 dark:text-zinc-200 block"
+                data-i18n="theme"
+                >Theme</label
+              >
+              <p class="text-xs text-zinc-500" data-i18n="theme_desc">
+                Switch light / dark mode
+              </p>
+            </div>
+            <div class="relative shrink-0">
+              <select
+                id="theme-select"
+                class="w-36 appearance-none bg-zinc-100 dark:bg-[#1f1f1f] border border-zinc-300 dark:border-zinc-700 text-zinc-800 dark:text-zinc-200 text-xs font-medium rounded-xl pl-3 pr-8 py-2.5 cursor-pointer focus:outline-none"
+              >
+                <option value="dark">Dark</option>
+                <option value="light">Light</option>
+              </select>
+              <i
+                data-feather="chevron-down"
+                class="w-4 h-4 text-zinc-400 pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2"
+              ></i>
+            </div>
+          </div>
+
+          <div class="border-t border-zinc-200 dark:border-zinc-700/60"></div>
+
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <label
+                class="text-sm font-medium text-zinc-800 dark:text-zinc-200 block"
+                data-i18n="language"
+                >Language</label
+              >
+              <p class="text-xs text-zinc-500" data-i18n="language_desc">
+                Select your preferred user interface language
+              </p>
+            </div>
+            <div class="relative shrink-0">
+              <select
+                id="language-select"
+                class="w-36 appearance-none bg-zinc-100 dark:bg-[#1f1f1f] border border-zinc-300 dark:border-zinc-700 text-zinc-800 dark:text-zinc-200 text-xs font-medium rounded-xl pl-3 pr-8 py-2.5 cursor-pointer focus:outline-none"
+              >
+                <option value="en">English</option>
+                <option value="ta">Tamil (தமிழ்)</option>
+                <option value="es">Spanish (Español)</option>
+                <option value="fr">French (Français)</option>
+                <option value="de">German (Deutsch)</option>
+              </select>
+              <i
+                data-feather="chevron-down"
+                class="w-4 h-4 text-zinc-400 pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2"
+              ></i>
+            </div>
+          </div>
+
+          <div class="border-t border-zinc-200 dark:border-zinc-700/60"></div>
+
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <label
+                class="text-sm font-medium text-zinc-800 dark:text-zinc-200 block"
+                data-i18n="clear_chats"
+                >Clear all chats</label
+              >
+              <p class="text-xs text-zinc-500" data-i18n="clear_chats_desc">
+                Permanently delete all conversation records
+              </p>
+            </div>
+            <button
+              id="clear-all-chats-btn"
+              class="w-20 py-2 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white text-xs font-semibold rounded-xl transition"
+              data-i18n="clear"
+            >
+              Clear
+            </button>
+          </div>
+        </div>
+
+        <div
+          class="px-6 py-3.5 bg-zinc-50 dark:bg-zinc-900 border-t border-zinc-200 dark:border-zinc-800 flex justify-end"
+        >
+          <button
+            id="done-settings-btn"
+            class="px-5 py-2 bg-black dark:bg-white text-white dark:text-black text-xs font-semibold rounded-xl hover:opacity-90 transition"
+            data-i18n="done"
+          >
+            Done
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Personalization Modal -->
+    <div
+      id="personalization-modal"
+      class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 hidden backdrop-blur-sm"
+    >
+      <div
+        class="bg-white dark:bg-[#262626] border border-zinc-200 dark:border-zinc-700 rounded-2xl w-full max-w-lg p-6 shadow-2xl space-y-4"
+      >
+        <div
+          class="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-700 pb-3"
+        >
+          <h3
+            class="text-sm font-semibold text-zinc-800 dark:text-zinc-100"
+            data-i18n="personalization"
+          >
+            Personalization
+          </h3>
+          <button
+            class="close-modal-btn text-zinc-400 hover:text-zinc-800 dark:hover:text-white"
+          >
+            <i data-feather="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+        <div>
+          <label
+            class="text-xs font-medium text-zinc-500 dark:text-zinc-400 block mb-1.5"
+            >What would you like OmniMind to know about you to provide better
+            responses?</label
+          >
+          <textarea
+            id="custom-instructions"
+            rows="4"
+            placeholder="e.g. Always explain code in Tamil, prefer clean Python code, keep answers concise..."
+            class="w-full bg-lightInput dark:bg-darkInput border border-zinc-300 dark:border-zinc-700 rounded-xl p-3 text-xs text-zinc-800 dark:text-zinc-100 focus:outline-none"
+          ></textarea>
+        </div>
+        <div class="flex justify-end gap-2 text-xs pt-2">
+          <button
+            class="close-modal-btn px-4 py-2 rounded-xl bg-zinc-200 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-300"
+            data-i18n="cancel"
+          >
+            Cancel
+          </button>
+          <button
+            id="save-personalization-btn"
+            class="px-4 py-2 rounded-xl bg-black dark:bg-white text-white dark:text-black font-semibold"
+            data-i18n="save"
+          >
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div
+      id="profile-modal"
+      class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 hidden backdrop-blur-sm"
+    >
+      <div
+        class="bg-white dark:bg-[#262626] border border-zinc-200 dark:border-zinc-700 rounded-2xl w-full max-w-md p-6 shadow-2xl space-y-4"
+      >
+        <div
+          class="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-700 pb-3"
+        >
+          <h3
+            class="text-sm font-semibold text-zinc-800 dark:text-zinc-100"
+            data-i18n="profile"
+          >
+            User Profile
+          </h3>
+          <button
+            class="close-modal-btn text-zinc-400 hover:text-zinc-800 dark:hover:text-white"
+          >
+            <i data-feather="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+        <div class="flex items-center gap-4 py-2">
+          <div
+            class="w-14 h-14 rounded-full bg-emerald-600 flex items-center justify-center font-bold text-lg text-white"
+          >
+            U
+          </div>
+          <div>
+            <h4 class="text-sm font-semibold text-zinc-800 dark:text-zinc-100">
+              User Account
+            </h4>
+            <p class="text-xs text-zinc-500">user@example.com</p>
+            <span
+              class="inline-block mt-1 bg-emerald-500/10 text-emerald-500 text-[10px] px-2 py-0.5 rounded-md font-medium"
+              >Standard License</span
+            >
+          </div>
+        </div>
+        <div class="flex justify-end text-xs pt-2">
+          <button
+            class="close-modal-btn px-4 py-2 rounded-xl bg-black dark:bg-white text-white dark:text-black font-semibold"
+            data-i18n="done"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div
+      id="help-modal"
+      class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 hidden backdrop-blur-sm"
+    >
+      <div
+        class="bg-white dark:bg-[#262626] border border-zinc-200 dark:border-zinc-700 rounded-2xl w-full max-w-md p-6 shadow-2xl space-y-4"
+      >
+        <div
+          class="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-700 pb-3"
+        >
+          <h3
+            class="text-sm font-semibold text-zinc-800 dark:text-zinc-100"
+            data-i18n="help"
+          >
+            Help & Support
+          </h3>
+          <button
+            class="close-modal-btn text-zinc-400 hover:text-zinc-800 dark:hover:text-white"
+          >
+            <i data-feather="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+        <div class="space-y-2 text-xs text-zinc-700 dark:text-zinc-300">
+          <p
+            class="p-2.5 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-700/50 cursor-pointer flex items-center justify-between"
+          >
+            <span>Documentation & Guide</span>
+            <i
+              data-feather="external-link"
+              class="w-3.5 h-3.5 text-zinc-400"
+            ></i>
+          </p>
+          <p
+            class="p-2.5 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-700/50 cursor-pointer flex items-center justify-between"
+          >
+            <span>Keyboard Shortcuts</span>
+            <span class="text-zinc-500 font-mono">Enter to Send</span>
+          </p>
+          <p
+            class="p-2.5 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-700/50 cursor-pointer flex items-center justify-between"
+          >
+            <span>Terms & Privacy</span>
+            <i
+              data-feather="external-link"
+              class="w-3.5 h-3.5 text-zinc-400"
+            ></i>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rename Chat Modal -->
+    <div
+      id="rename-modal"
+      class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 hidden backdrop-blur-sm"
+    >
+      <div
+        class="bg-white dark:bg-[#262626] border border-zinc-200 dark:border-zinc-700 rounded-2xl w-full max-w-md p-5 shadow-2xl space-y-4"
+      >
+        <h3
+          class="text-sm font-semibold text-zinc-800 dark:text-zinc-100"
+          data-i18n="rename_chat"
+        >
+          Rename Conversation
+        </h3>
+        <input
+          type="text"
+          id="rename-input"
+          class="w-full bg-lightInput dark:bg-darkInput border border-zinc-300 dark:border-zinc-700 rounded-xl px-4 py-2.5 text-sm text-zinc-800 dark:text-zinc-100 focus:outline-none"
+        />
+        <div class="flex justify-end gap-2 text-xs">
+          <button
+            id="cancel-rename-btn"
+            class="px-4 py-2 rounded-lg bg-zinc-200 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-300"
+            data-i18n="cancel"
+          >
+            Cancel
+          </button>
+          <button
+            id="save-rename-btn"
+            class="px-4 py-2 rounded-lg bg-black dark:bg-white text-white dark:text-black font-semibold"
+            data-i18n="save"
+          >
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Inlined Application Logic (Zero Script 404s guaranteed) -->
+    <script>
+      $(document).ready(function () {
+        feather.replace();
+
+        marked.setOptions({
+          breaks: true,
+          gfm: true,
+        });
+
+        const STORAGE_KEY = "omnimind_ai_v15_chats";
+
+        let currentModel = "qwen/qwen3.6-27b";
+        let currentTheme = localStorage.getItem("omnimind_theme") || "dark";
+        let currentLang = localStorage.getItem("omnimind_language") || "en";
+        let currentActiveCodeForPreview = "";
+        let chatPendingRenameId = null;
+
+        const savedData = localStorage.getItem(STORAGE_KEY);
+        let chats = savedData !== null ? JSON.parse(savedData) : [];
+
+        let activeChatId = chats.length > 0 ? chats[0].id : null;
+
+        function persistState() {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(chats));
+        }
+
+        function escapeHtml(text) {
+          return $("<div>").text(text).html();
+        }
+
+        const translations = {
+          en: {
+            new_chat: "New chat",
+            conversations: "Conversations",
+            personalization: "Personalization",
+            profile: "Profile",
+            settings: "Settings",
+            help: "Help",
+            hero_title: "What can I help with today?",
+            input_placeholder: "Message OmniMind...",
+            disclaimer:
+              "OmniMind AI can make mistakes. Verify important information.",
+            theme: "Theme",
+            theme_desc: "Switch light / dark mode",
+            language: "Language",
+            language_desc: "Select your preferred user interface language",
+            clear_chats: "Clear all chats",
+            clear_chats_desc: "Permanently delete all conversation records",
+            clear: "Clear",
+            done: "Done",
+            cancel: "Cancel",
+            save: "Save",
+            rename_chat: "Rename Conversation",
+            no_chats: "No conversations yet.",
+          },
+          ta: {
+            new_chat: "புதிய அரட்டை",
+            conversations: "உரையாடல்கள்",
+            personalization: "தனிப்பயனாக்கம் (Personalization)",
+            profile: "சுயவிவரம் (Profile)",
+            settings: "அமைப்புகள் (Settings)",
+            help: "உதவி (Help)",
+            hero_title: "இன்று நான் உங்களுக்கு எவ்வாறு உதவ முடியும்?",
+            input_placeholder: "OmniMind-க்கு செய்தி அனுப்பவும்...",
+            disclaimer:
+              "OmniMind AI தவறுகளைச் செய்யலாம். முக்கியமான தகவல்களைச் சரிபார்க்கவும்.",
+            theme: "தீம் (Theme)",
+            theme_desc: "Light மற்றும் Dark மோடுகளுக்கு இடையே மாற்றவும்",
+            language: "மொழி (Language)",
+            language_desc:
+              "நீங்கள் விரும்பும் இடைமுக மொழியைத் தேர்ந்தெடுக்கவும்",
+            clear_chats: "அனைத்து அரட்டைகளையும் அழிக்கவும்",
+            clear_chats_desc:
+              "அனைத்து உரையாடல் பதிவுகளையும் நிரந்தரமாக நீக்கவும்",
+            clear: "அழி",
+            done: "முடிந்தது",
+            cancel: "ரத்து செய்",
+            save: "சேமி",
+            rename_chat: "பெயரை மாற்றவும்",
+            no_chats: "உரையாடல்கள் எதுவும் இல்லை.",
+          },
+        };
+
+        function removeThinkingProcess(rawText) {
+          if (!rawText) return "";
+          let text = rawText;
+
+          text = text.replace(/<think>[\s\S]*?<\/think>/gi, "");
+
+          if (/Here's a thinking process:/i.test(text)) {
+            const parts = text.split(/\n\s*\n/);
+            const cleanParts = parts.filter((p) => {
+              const lower = p.toLowerCase();
+              return (
+                !lower.includes("thinking process") &&
+                !lower.includes("analyze user input") &&
+                !lower.includes("identify intent") &&
+                !lower.includes("determine scope")
+              );
+            });
+            text = cleanParts.join("\n\n");
+          }
+
+          return text.trim();
+        }
+
+        function parseAIResponse(content) {
+          if (!content) return "";
+          let cleanText = removeThinkingProcess(content);
+
+          let parsedHtml = "";
+          try {
+            parsedHtml = marked.parse(cleanText);
+          } catch (e) {
+            parsedHtml = escapeHtml(cleanText);
+          }
+
+          const $temp = $("<div>").html(parsedHtml);
+
+          $temp.find("pre").each(function () {
+            const $code = $(this).find("code");
+            const codeText = $code.text();
+            const langClass = $code.attr("class") || "";
+            const langMatch = langClass.match(/language-(\w+)/);
+            const rawLang = langMatch ? langMatch[1] : "html";
+            const displayLang =
+              rawLang.charAt(0).toUpperCase() + rawLang.slice(1).toLowerCase();
+
+            let highlightedCode = "";
+            try {
+              highlightedCode = hljs.highlight(codeText, {
+                language: hljs.getLanguage(rawLang) ? rawLang : "plaintext",
+              }).value;
+            } catch (e) {
+              highlightedCode = escapeHtml(codeText);
+            }
+
+            const isWebCode = [
+              "html",
+              "htm",
+              "xml",
+              "svg",
+              "css",
+              "javascript",
+              "js",
+            ].includes(rawLang.toLowerCase());
+
+            const playIconHtml = isWebCode
+              ? `<button class="run-preview-btn code-action-icon-btn" title="Live Preview">
+                 <i data-feather="play-circle" class="w-4 h-4"></i>
+               </button>`
+              : ``;
+
+            const codeContainerHtml = `
+            <div class="code-container">
+              <div class="code-header">
+                <div class="flex items-center gap-2 font-medium text-xs text-zinc-700 dark:text-zinc-200">
+                  <i data-feather="code" class="w-3.5 h-3.5 text-zinc-500 dark:text-zinc-400"></i>
+                  <span class="code-lang-label">${displayLang}</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  ${playIconHtml}
+                  <button class="download-code-btn code-action-icon-btn" title="Download File">
+                    <i data-feather="download" class="w-4 h-4"></i>
+                  </button>
+                  <button class="copy-code-btn code-action-icon-btn" title="Copy Code">
+                    <i data-feather="copy" class="w-4 h-4"></i>
+                  </button>
+                  <button class="toggle-collapse-code-btn code-action-icon-btn" title="Collapse / Expand Code">
+                    <i data-feather="chevron-down" class="w-4 h-4 transition-transform duration-200"></i>
+                  </button>
+                </div>
+              </div>
+              <pre class="code-content-block"><code>${highlightedCode}</code></pre>
+            </div>
+          `;
+
+            $(this).replaceWith(codeContainerHtml);
+          });
+
+          return $temp.html();
+        }
+
+        $(document).on("click", ".toggle-collapse-code-btn", function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+
+          const $container = $(this).closest(".code-container");
+          const $pre = $container.find("pre.code-content-block");
+          const $icon = $(this).find("svg");
+
+          if ($pre.is(":visible")) {
+            $pre.slideUp(180);
+            $icon.addClass("rotate-180");
+          } else {
+            $pre.slideDown(180);
+            $icon.removeClass("rotate-180");
+          }
+        });
+
+        $(document).on("click", ".run-preview-btn", function () {
+          const $container = $(this).closest(".code-container");
+          const codeText = $container
+            .find("pre.code-content-block code")
+            .text();
+          currentActiveCodeForPreview = codeText;
+
+          renderPreviewInFrame(codeText);
+          $("#live-preview-modal").removeClass("hidden");
+          feather.replace();
+        });
+
+        function renderPreviewInFrame(code) {
+          const frame = document.getElementById("live-preview-frame");
+          const frameDoc =
+            frame.contentDocument || frame.contentWindow.document;
+          frameDoc.open();
+          frameDoc.write(code);
+          frameDoc.close();
+        }
+
+        $("#refresh-preview-btn").on("click", function () {
+          if (currentActiveCodeForPreview) {
+            renderPreviewInFrame(currentActiveCodeForPreview);
+          }
+        });
+
+        $(document).on("click", ".download-code-btn", function () {
+          const $container = $(this).closest(".code-container");
+          const codeText = $container
+            .find("pre.code-content-block code")
+            .text();
+          const language = (
+            $container.find(".code-lang-label").text() || "txt"
+          ).toLowerCase();
+
+          const extMap = {
+            html: "html",
+            htm: "html",
+            javascript: "js",
+            js: "js",
+            python: "py",
+            py: "py",
+            css: "css",
+            json: "json",
+            php: "php",
+            sql: "sql",
+            cpp: "cpp",
+            java: "java",
+          };
+
+          const ext = extMap[language] || "txt";
+          const filename = `code-${Date.now()}.${ext}`;
+
+          const blob = new Blob([codeText], {
+            type: "text/plain;charset=utf-8",
+          });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = filename;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        });
+
+        $(document).on("click", ".copy-code-btn", function () {
+          const $btn = $(this);
+          const codeText = $btn
+            .closest(".code-container")
+            .find("pre.code-content-block code")
+            .text();
+
+          navigator.clipboard.writeText(codeText).then(() => {
+            $btn.html(
+              '<i data-feather="check" class="w-4 h-4 text-emerald-500"></i>',
+            );
+            feather.replace();
+            setTimeout(() => {
+              $btn.html('<i data-feather="copy" class="w-4 h-4"></i>');
+              feather.replace();
+            }, 2000);
+          });
+        });
+
+        function renderSidebarChats() {
+          const $list = $("#chat-list");
+          $list.empty();
+          const dict = translations[currentLang] || translations.en;
+
+          if (!chats || chats.length === 0) {
+            $list.append(
+              `<p class="text-xs text-zinc-400 px-3 py-2">${dict.no_chats}</p>`,
+            );
+            return;
+          }
+
+          const sortedChats = [...chats].sort((a, b) => {
+            if (a.pinned === b.pinned) return b.createdAt - a.createdAt;
+            return a.pinned ? -1 : 1;
+          });
+
+          sortedChats.forEach((chat) => {
+            const isActive = chat.id === activeChatId;
+            const activeClass = isActive
+              ? "bg-zinc-200 dark:bg-zinc-800 text-zinc-900 dark:text-white font-medium shadow-sm"
+              : "text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800/70";
+            const pinBadge = chat.pinned
+              ? '<i data-feather="pin" class="w-3 h-3 text-amber-500 shrink-0"></i>'
+              : "";
+
+            const chatItemHtml = `
+            <div class="chat-row group relative flex items-center justify-between rounded-xl px-3 py-2.5 text-sm cursor-pointer transition select-none ${activeClass}" data-chat-id="${chat.id}">
+              <div class="flex items-center gap-2 truncate flex-1 pr-2">
+                ${pinBadge}
+                <span class="chat-title truncate">${escapeHtml(chat.title)}</span>
+              </div>
+
+              <button class="chat-item-menu-btn opacity-0 group-hover:opacity-100 p-1 rounded-md hover:bg-zinc-300 dark:hover:bg-zinc-700 text-zinc-400 hover:text-zinc-800 dark:hover:text-white transition shrink-0" title="Options">
+                <i data-feather="more-horizontal" class="w-3.5 h-3.5"></i>
+              </button>
+
+              <div class="chat-item-menu hidden absolute right-2 top-10 w-36 bg-white dark:bg-[#262626] border border-zinc-200 dark:border-zinc-700 rounded-xl shadow-2xl p-1 z-30 space-y-0.5">
+                <button class="pin-chat-action w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-700 text-xs text-zinc-700 dark:text-zinc-200">
+                  <i data-feather="pin" class="w-3 h-3 text-amber-500"></i>
+                  <span>${chat.pinned ? "Unpin" : "Pin"}</span>
+                </button>
+                <button class="rename-chat-action w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-700 text-xs text-zinc-700 dark:text-zinc-200">
+                  <i data-feather="edit-2" class="w-3 h-3"></i>
+                  <span>Rename</span>
+                </button>
+                <div class="border-t border-zinc-200 dark:border-zinc-700 my-0.5"></div>
+                <button class="delete-chat-action w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg hover:bg-red-500/10 text-xs text-red-500">
+                  <i data-feather="trash-2" class="w-3 h-3"></i>
+                  <span>Delete</span>
+                </button>
+              </div>
+            </div>
+          `;
+            $list.append(chatItemHtml);
+          });
+
+          feather.replace();
+        }
+
+        function switchChat(chatId) {
+          activeChatId = chatId;
+          renderSidebarChats();
+
+          const currentChat = chats.find((c) => c.id === chatId);
+
+          if (!currentChat || currentChat.messages.length === 0) {
+            $("#messages-container").empty().addClass("hidden");
+            $("#empty-state").removeClass("hidden");
+          } else {
+            $("#empty-state").addClass("hidden");
+            $("#messages-container").empty().removeClass("hidden");
+
+            currentChat.messages.forEach((msg) => {
+              appendMessage(
+                msg.role,
+                msg.content,
+                msg.id,
+                msg.liked,
+                msg.disliked,
+                false,
+              );
+            });
+            scrollToBottom();
+          }
+
+          if ($(window).width() < 768)
+            $("#sidebar").addClass("-translate-x-full");
+        }
+
+        $(document).on("click", ".pin-chat-action", function (e) {
+          e.stopPropagation();
+          const chatId = $(this).closest(".chat-row").data("chat-id");
+          const targetChat = chats.find((c) => c.id === chatId);
+          if (targetChat) {
+            targetChat.pinned = !targetChat.pinned;
+            persistState();
+            renderSidebarChats();
+          }
+        });
+
+        $(document).on("click", ".rename-chat-action", function (e) {
+          e.stopPropagation();
+          $(".chat-item-menu").addClass("hidden");
+          const chatId = $(this).closest(".chat-row").data("chat-id");
+          const targetChat = chats.find((c) => c.id === chatId);
+          if (targetChat) {
+            chatPendingRenameId = chatId;
+            $("#rename-input").val(targetChat.title);
+            $("#rename-modal").removeClass("hidden");
+            $("#rename-input").focus();
+          }
+        });
+
+        $("#save-rename-btn").on("click", function () {
+          const newTitle = $("#rename-input").val().trim();
+          if (newTitle && chatPendingRenameId) {
+            const targetChat = chats.find((c) => c.id === chatPendingRenameId);
+            if (targetChat) {
+              targetChat.title = newTitle;
+              persistState();
+              renderSidebarChats();
+            }
+          }
+          $("#rename-modal").addClass("hidden");
+        });
+
+        $("#cancel-rename-btn").on("click", function () {
+          $("#rename-modal").addClass("hidden");
+        });
+
+        $(document).on("click", ".delete-chat-action", function (e) {
+          e.stopPropagation();
+          const chatId = $(this).closest(".chat-row").data("chat-id");
+          chats = chats.filter((c) => c.id !== chatId);
+          persistState();
+
+          if (activeChatId === chatId) {
+            if (chats.length > 0) switchChat(chats[0].id);
+            else {
+              activeChatId = null;
+              renderSidebarChats();
+              $("#messages-container").empty().addClass("hidden");
+              $("#empty-state").removeClass("hidden");
+            }
+          } else {
+            renderSidebarChats();
+          }
+        });
+
+        $(document).on("click", ".chat-item-menu-btn", function (e) {
+          e.stopPropagation();
+          $(".chat-item-menu")
+            .not($(this).siblings(".chat-item-menu"))
+            .addClass("hidden");
+          $(this).siblings(".chat-item-menu").toggleClass("hidden");
+        });
+
+        $(document).on("click", ".chat-row", function (e) {
+          if (
+            $(e.target).closest(".chat-item-menu-btn, .chat-item-menu").length
+          )
+            return;
+          const chatId = $(this).data("chat-id");
+          switchChat(chatId);
+        });
+
+        function applyTheme(theme) {
+          currentTheme = theme;
+          if (theme === "dark") {
+            $("html").addClass("dark");
+          } else {
+            $("html").removeClass("dark");
+          }
+          $("#theme-select").val(theme);
+          localStorage.setItem("omnimind_theme", theme);
+        }
+
+        function applyLanguage(lang) {
+          currentLang = lang;
+          localStorage.setItem("omnimind_language", lang);
+          $("#language-select").val(lang);
+
+          const dict = translations[lang] || translations.en;
+
+          $("[data-i18n]").each(function () {
+            const key = $(this).data("i18n");
+            if (dict[key]) $(this).text(dict[key]);
+          });
+
+          $("[data-i18n-placeholder]").each(function () {
+            const key = $(this).data("i18n-placeholder");
+            if (dict[key]) $(this).attr("placeholder", dict[key]);
+          });
+
+          renderSidebarChats();
+        }
+
+        applyTheme(currentTheme);
+        applyLanguage(currentLang);
+        if (activeChatId) switchChat(activeChatId);
+
+        $("#theme-select").on("change", function () {
+          applyTheme($(this).val());
+        });
+
+        $("#language-select").on("change", function () {
+          applyLanguage($(this).val());
+        });
+
+        $("#toggle-sidebar").on("click", function (e) {
+          e.stopPropagation();
+          if ($(window).width() < 768) {
+            $("#sidebar").toggleClass("-translate-x-full");
+            $("#sidebar-overlay").toggleClass("hidden");
+          } else {
+            $("#sidebar").toggleClass("md:-ml-64");
+          }
+        });
+
+        $("#close-sidebar-btn, #sidebar-overlay").on("click", function () {
+          $("#sidebar").addClass("-translate-x-full");
+          $("#sidebar-overlay").addClass("hidden");
+        });
+
+        $("#open-personalization-btn").on("click", function (e) {
+          e.stopPropagation();
+          $("#profile-menu").addClass("hidden");
+          $("#custom-instructions").val(
+            localStorage.getItem("omnimind_instructions") || "",
+          );
+          $("#personalization-modal").removeClass("hidden");
+        });
+
+        $("#save-personalization-btn").on("click", function () {
+          const val = $("#custom-instructions").val().trim();
+          localStorage.setItem("omnimind_instructions", val);
+          $("#personalization-modal").addClass("hidden");
+        });
+
+        $("#open-profile-btn").on("click", function (e) {
+          e.stopPropagation();
+          $("#profile-menu").addClass("hidden");
+          $("#profile-modal").removeClass("hidden");
+        });
+
+        $("#open-settings-btn, #quick-settings-btn").on("click", function (e) {
+          e.stopPropagation();
+          $("#profile-menu").addClass("hidden");
+          $("#settings-modal").removeClass("hidden");
+        });
+
+        $("#close-settings-btn, #done-settings-btn").on("click", function () {
+          $("#settings-modal").addClass("hidden");
+        });
+
+        $("#open-help-btn").on("click", function (e) {
+          e.stopPropagation();
+          $("#profile-menu").addClass("hidden");
+          $("#help-modal").removeClass("hidden");
+        });
+
+        $(".close-modal-btn").on("click", function () {
+          $(this).closest(".fixed").addClass("hidden");
+        });
+
+        $("#clear-all-chats-btn").on("click", function () {
+          chats = [];
+          activeChatId = null;
+          persistState();
+          renderSidebarChats();
+          $("#messages-container").empty().addClass("hidden");
+          $("#empty-state").removeClass("hidden");
+          $("#settings-modal").addClass("hidden");
+        });
+
+        $.getJSON("/api/models", function (res) {
+          if (res && res.models && res.models.length > 0) {
+            currentModel = res.models[0];
+            $("#current-model-label").text(
+              currentModel.split("/")[1] || currentModel,
+            );
+
+            const $menu = $("#model-menu");
+            $menu.empty();
+
+            res.models.forEach((modelName, idx) => {
+              const isSelected = idx === 0;
+              const checkClass = isSelected ? "" : "hidden";
+              const displayName = modelName.split("/")[1] || modelName;
+
+              const itemHtml = `
+              <button class="model-option w-full flex items-start justify-between p-2.5 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-700/60 text-left transition" data-model="${modelName}">
+                <div>
+                  <p class="text-xs font-semibold text-zinc-800 dark:text-zinc-100">${displayName}</p>
+                  <p class="text-[10px] text-emerald-500 font-medium">${modelName}</p>
+                </div>
+                <i data-feather="check" class="check-icon w-4 h-4 text-emerald-500 mt-0.5 ${checkClass}"></i>
+              </button>
+            `;
+              $menu.append(itemHtml);
+            });
+
+            feather.replace();
+          }
+        });
+
+        $(document).on("click", ".model-option", function () {
+          currentModel = $(this).data("model");
+          $("#current-model-label").text(
+            currentModel.split("/")[1] || currentModel,
+          );
+          $(".check-icon").addClass("hidden");
+          $(this).find(".check-icon").removeClass("hidden");
+          $("#model-menu").addClass("hidden");
+        });
+
+        $("#user-input").on("input", function () {
+          this.style.height = "auto";
+          this.style.height = this.scrollHeight + "px";
+          const text = $(this).val().trim();
+          $("#send-btn").prop("disabled", text.length === 0);
+          $("#clear-input-btn").toggleClass("hidden", text.length === 0);
+        });
+
+        $("#clear-input-btn").on("click", function () {
+          $("#user-input").val("").css("height", "auto").focus();
+          $("#send-btn").prop("disabled", true);
+          $(this).addClass("hidden");
+        });
+
+        $("#user-input").on("keydown", function (e) {
+          if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            $("#chat-form").submit();
+          }
+        });
+
+        $(".prompt-chip").on("click", function () {
+          const text =
+            $(this).find("span").text() +
+            " - " +
+            $(this).contents().last().text().trim();
+          $("#user-input").val(text);
+          $("#send-btn").prop("disabled", false);
+          $("#clear-input-btn").removeClass("hidden");
+          $("#chat-form").submit();
+        });
+
+        $("#chat-form").on("submit", function (e) {
+          e.preventDefault();
+          const inputVal = $("#user-input").val().trim();
+          if (!inputVal) return;
+
+          if (!activeChatId) {
+            const newChat = {
+              id: "chat-" + Date.now(),
+              title: inputVal.slice(0, 24) + "...",
+              pinned: false,
+              createdAt: Date.now(),
+              messages: [],
+            };
+            chats.unshift(newChat);
+            activeChatId = newChat.id;
+          }
+
+          const currentChat = chats.find((c) => c.id === activeChatId);
+
+          if (currentChat.messages.length === 0) {
+            currentChat.title =
+              inputVal.slice(0, 25) + (inputVal.length > 25 ? "..." : "");
+          }
+
+          $("#empty-state").addClass("hidden");
+          $("#messages-container").removeClass("hidden");
+
+          const userMsgId = "msg-" + Date.now();
+          appendMessage("user", inputVal, userMsgId, false, false, true);
+          currentChat.messages.push({
+            id: userMsgId,
+            role: "user",
+            content: inputVal,
+          });
+          persistState();
+          renderSidebarChats();
+
+          $("#user-input").val("").css("height", "auto");
+          $("#send-btn").prop("disabled", true);
+          $("#clear-input-btn").addClass("hidden");
+
+          const loadingId = "loading-" + Date.now();
+          showLoadingAssistant(loadingId);
+          scrollToBottom();
+
+          const userCustomInstructions = (
+            localStorage.getItem("omnimind_instructions") || ""
+          ).trim();
+          let systemInstruction =
+            "You are OmniMind AI. Answer directly, helpfully and concisely. Do NOT output internal thoughts, reasoning steps, or thinking processes. Do not say 'Here is a thinking process'. Provide only the clean final answer and complete code in standard markdown codeblocks.";
+
+          if (userCustomInstructions.length > 0) {
+            systemInstruction += `\n\nCRITICAL USER PERSONALIZATION INSTRUCTIONS (YOU MUST STRICTLY OBEY):\n"""\n${userCustomInstructions}\n"""\nAdapt all formatting, language, tone, and answers to follow these instructions precisely.`;
+          }
+
+          const apiMessages = [
+            { role: "system", content: systemInstruction },
+            ...currentChat.messages.map((m) => ({
+              role: m.role,
+              content: m.content,
+            })),
+          ];
+
+          $.ajax({
+            url: "/api/chat",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+              model: currentModel,
+              messages: apiMessages,
+            }),
+            success: function (response) {
+              $(`#${loadingId}`).remove();
+              const rawReply = response.choices[0].message.content;
+              const cleanReply = removeThinkingProcess(rawReply);
+              const aiMsgId = "msg-" + Date.now();
+
+              appendMessage(
+                "assistant",
+                cleanReply,
+                aiMsgId,
+                false,
+                false,
+                true,
+              );
+              currentChat.messages.push({
+                id: aiMsgId,
+                role: "assistant",
+                content: cleanReply,
+                liked: false,
+                disliked: false,
+              });
+              persistState();
+            },
+            error: function () {
+              $(`#${loadingId}`).remove();
+              const errId = "msg-" + Date.now();
+              appendMessage(
+                "assistant",
+                "Something went wrong. Please try again later.",
+                errId,
+                false,
+                false,
+                true,
+              );
+            },
+            complete: function () {
+              scrollToBottom();
+            },
+          });
+        });
+
+        function appendMessage(
+          role,
+          content,
+          msgId,
+          liked = false,
+          disliked = false,
+          shouldScroll = true,
+        ) {
+          const isUser = role === "user";
+          let messageHtml = "";
+
+          if (isUser) {
+            messageHtml = `
+            <div class="message-group flex flex-col items-end group/user mb-4" data-msg-id="${msgId}">
+              <div class="msg-text-content w-fit max-w-[85%] bg-zinc-200 dark:bg-[#2f2f2f] text-zinc-900 dark:text-zinc-100 px-4 py-2 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap break-words">${escapeHtml(content.trim())}</div>
+              <div class="flex items-center gap-1.5 mt-1 opacity-0 group-hover/user:opacity-100 transition text-zinc-400 text-xs pr-1">
+                <button class="copy-msg-btn p-1 hover:text-zinc-800 dark:hover:text-white" title="Copy prompt"><i data-feather="copy" class="w-3 h-3"></i></button>
+                <button class="delete-msg-btn p-1 hover:text-red-500" title="Delete prompt"><i data-feather="trash-2" class="w-3 h-3"></i></button>
+              </div>
+            </div>
+          `;
+          } else {
+            const likeClass = liked ? "text-emerald-500" : "";
+            const dislikeClass = disliked ? "text-red-500" : "";
+            const formattedContent = parseAIResponse(content);
+
+            messageHtml = `
+            <div class="message-group flex items-start gap-3 md:gap-4 text-sm text-zinc-800 dark:text-zinc-200 mb-5" data-msg-id="${msgId}">
+              <div class="w-7 h-7 rounded-full border border-emerald-500/30 bg-emerald-500/10 flex items-center justify-center shrink-0 mt-0.5 text-emerald-500">
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 12 2"/></svg>
+              </div>
+              <div class="flex-1 space-y-1.5 overflow-hidden">
+                <div class="msg-ai-body pt-0.5 leading-relaxed break-words">${formattedContent}</div>
+                <div class="flex items-center gap-2 pt-1 text-zinc-400 text-xs">
+                  <button class="copy-msg-btn p-1.5 hover:bg-zinc-200 dark:hover:bg-zinc-800 hover:text-zinc-800 dark:hover:text-zinc-200 rounded-lg transition" title="Copy response">
+                    <i data-feather="copy" class="w-3.5 h-3.5"></i>
+                  </button>
+                  <button class="like-btn p-1.5 hover:bg-zinc-200 dark:hover:bg-zinc-800 hover:text-emerald-500 rounded-lg transition ${likeClass}" title="Good response">
+                    <i data-feather="thumbs-up" class="w-3.5 h-3.5"></i>
+                  </button>
+                  <button class="dislike-btn p-1.5 hover:bg-zinc-200 dark:hover:bg-zinc-800 hover:text-red-500 rounded-lg transition ${dislikeClass}" title="Bad response">
+                    <i data-feather="thumbs-down" class="w-3.5 h-3.5"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+          }
+
+          $("#messages-container").append(messageHtml);
+          feather.replace();
+          if (shouldScroll) scrollToBottom();
+        }
+
+        function showLoadingAssistant(id) {
+          const loadingHtml = `
+          <div id="${id}" class="flex items-start gap-3 md:gap-4 text-sm text-zinc-400">
+            <div class="w-7 h-7 rounded-full border border-emerald-500/30 bg-emerald-500/10 flex items-center justify-center shrink-0 mt-0.5 text-emerald-500">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 22 8.5 22 15.5 12 2"/></svg>
+            </div>
+            <div class="flex items-center gap-1.5 pt-2">
+              <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+              <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse [animation-delay:200ms]"></div>
+              <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse [animation-delay:400ms]"></div>
+            </div>
+          </div>
+        `;
+          $("#messages-container").append(loadingHtml);
+          feather.replace();
+        }
+
+        function scrollToBottom() {
+          const chatStream = $("#chat-stream");
+          chatStream.scrollTop(chatStream[0].scrollHeight);
+        }
+
+        $(document).on("click", ".delete-msg-btn", function () {
+          const $msgGroup = $(this).closest(".message-group");
+          const msgId = $msgGroup.data("msg-id");
+          const currentChat = chats.find((c) => c.id === activeChatId);
+
+          if (currentChat) {
+            currentChat.messages = currentChat.messages.filter(
+              (m) => m.id !== msgId,
+            );
+            persistState();
+            $msgGroup.remove();
+            if (currentChat.messages.length === 0) {
+              $("#messages-container").addClass("hidden");
+              $("#empty-state").removeClass("hidden");
+            }
+          }
+        });
+
+        $(document).on("click", ".copy-msg-btn", function () {
+          const $btn = $(this);
+          const textToCopy = $btn
+            .closest(".message-group")
+            .find(".msg-text-content, .msg-ai-body")
+            .text()
+            .trim();
+          navigator.clipboard.writeText(textToCopy).then(() => {
+            $btn.html(
+              '<i data-feather="check" class="w-3.5 h-3.5 text-emerald-500"></i>',
+            );
+            feather.replace();
+            setTimeout(() => {
+              $btn.html('<i data-feather="copy" class="w-3.5 h-3.5"></i>');
+              feather.replace();
+            }, 2000);
+          });
+        });
+
+        $(document).on("click", ".like-btn", function () {
+          const $btn = $(this);
+          const $msgGroup = $btn.closest(".message-group");
+          const msgId = $msgGroup.data("msg-id");
+          const currentChat = chats.find((c) => c.id === activeChatId);
+          const targetMsg = currentChat?.messages.find((m) => m.id === msgId);
+
+          if (targetMsg) {
+            targetMsg.liked = !targetMsg.liked;
+            if (targetMsg.liked) targetMsg.disliked = false;
+            persistState();
+            $btn.toggleClass("text-emerald-500", targetMsg.liked);
+            $msgGroup.find(".dislike-btn").removeClass("text-red-500");
+          }
+        });
+
+        $(document).on("click", ".dislike-btn", function () {
+          const $btn = $(this);
+          const $msgGroup = $btn.closest(".message-group");
+          const msgId = $msgGroup.data("msg-id");
+          const currentChat = chats.find((c) => c.id === activeChatId);
+          const targetMsg = currentChat?.messages.find((m) => m.id === msgId);
+
+          if (targetMsg) {
+            targetMsg.disliked = !targetMsg.disliked;
+            if (targetMsg.disliked) targetMsg.liked = false;
+            persistState();
+            $btn.toggleClass("text-red-500", targetMsg.disliked);
+            $msgGroup.find(".like-btn").removeClass("text-emerald-500");
+          }
+        });
+
+        $("#new-chat-btn, #new-chat-top-btn, #mobile-new-chat-btn").on(
+          "click",
+          function () {
+            const newChat = {
+              id: "chat-" + Date.now(),
+              title: "New chat",
+              pinned: false,
+              createdAt: Date.now(),
+              messages: [],
+            };
+            chats.unshift(newChat);
+            persistState();
+            switchChat(newChat.id);
+          },
+        );
+
+        $("#profile-btn").on("click", function (e) {
+          e.stopPropagation();
+          $("#model-menu").addClass("hidden");
+          $("#profile-menu").toggleClass("hidden");
+        });
+
+        $("#model-btn").on("click", function (e) {
+          e.stopPropagation();
+          $("#profile-menu").addClass("hidden");
+          $("#model-menu").toggleClass("hidden");
+        });
+
+        $(document).on("click", function (e) {
+          if (!$(e.target).closest("#profile-dropdown-container").length)
+            $("#profile-menu").addClass("hidden");
+          if (!$(e.target).closest("#model-dropdown-container").length)
+            $("#model-menu").addClass("hidden");
+          if (
+            !$(e.target).closest(".chat-item-menu, .chat-item-menu-btn").length
+          )
+            $(".chat-item-menu").addClass("hidden");
+        });
+      });
+    </script>
+  </body>
+</html>

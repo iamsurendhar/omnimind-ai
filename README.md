@@ -1,17 +1,17 @@
-# OmniMind AI — Next-Generation Conversational AI & Code Canvas
+# OmniMind AI — Next-Generation Conversational AI Platform
 
 ![OmniMind AI Banner](https://img.shields.io/badge/OmniMind-AI%20Assistant-10b981?style=for-the-badge&logo=openai&logoColor=white)
 ![Vercel](https://img.shields.io/badge/Vercel-Deployed-black?style=for-the-badge&logo=vercel&logoColor=white)
 ![Node.js](https://img.shields.io/badge/Node.js-18+-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
 
-OmniMind AI is an open-source, full-stack conversational AI platform built with a sleek **ChatGPT-inspired interface**, powered by **Groq Cloud API** for ultra-fast, zero-cost intelligence. It features real-time conversation management, live code previews, full multi-language localization (i18n), and custom personalization.
+OmniMind AI is an open-source, full-stack conversational AI platform built with a sleek **ChatGPT-inspired interface**, powered by **Groq Cloud API** for ultra-fast, zero-cost intelligence. It features real-time conversation management, live web code previews, multi-language localization (i18n), and strict user personalization.
 
 ---
 
-## ✨ Features
+## ✨ Key Features
 
-- ⚡ **100% Free & Fast AI:** Powered by Groq Cloud API with native support for `qwen/qwen3.6-27b`, `llama-3.1-8b-instant`, and `openai/gpt-oss-120b`.
+- ⚡ **100% Free & Ultra-Fast AI:** Powered by Groq Cloud API with native support for `qwen/qwen3.6-27b`, `llama-3.1-8b-instant`, and `openai/gpt-oss-120b`.
 - 💻 **Interactive Code Renderer:**
   - Auto-formatted syntax highlighting with language detection.
   - **Live Web Preview Modal:** Instantly run HTML/CSS/JS code in a live sandbox iframe.
@@ -24,36 +24,34 @@ OmniMind AI is an open-source, full-stack conversational AI platform built with 
 - 🗂️ **Real-Time Conversation Management:**
   - Pin important chats to the top.
   - Rename conversation titles.
-  - Permanent deletion with LocalStorage synchronization.
+  - Permanent deletion with LocalStorage synchronization (no deleted chats returning on refresh).
 - 📱 **100% Responsive Design:** Smooth drawer sidebar navigation for mobile devices and collapsible desktop view.
-- 🚀 **Serverless Ready:** Built with native Vercel Serverless deployment configurations.
+- 🚀 **Serverless Ready:** Built with native Vercel Serverless deployment configurations (Zero 404s guaranteed).
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **Frontend:** HTML5, Tailwind CSS, jQuery, Marked.js, Highlight.js, Feather Icons.
-- **Backend:** Node.js, Express.js (Vercel Serverless Functions).
+- **Frontend:** Single-file architecture (`public/index.html`), Tailwind CSS, jQuery, Marked.js, Highlight.js, Feather Icons.
+- **Backend:** Node.js, Express.js Serverless Function (`api/index.js`).
 - **AI Infrastructure:** Groq Cloud API / OpenAI API.
 - **Hosting:** Vercel.
 
 ---
 
-## 📁 Project Structure
+## 📁 Clean Project Structure
 
 ```text
 omnimind-ai/
+├── api/
+│   └── index.js          # Express Backend & Groq API Handler
+├── public/
+│   └── index.html        # Complete Frontend Interface & Styles
 ├── .env                  # Environment variables (Local secrets)
 ├── .gitignore            # Git ignore configuration
 ├── vercel.json           # Vercel serverless routing configuration
 ├── package.json          # Node dependencies and scripts
-├── server.js             # Express backend server & API proxy
 ├── test.js               # Automated endpoint test suite
-├── index.html            # Main frontend application markup
 ├── LICENSE               # MIT License
-├── README.md             # Project documentation
-├── css/
-│   └── style.css         # Adaptive light/dark stylesheet
-└── js/
-    └── app.js            # Client-side application logic
+└── README.md             # Project documentation
 ```

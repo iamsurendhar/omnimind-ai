@@ -10,7 +10,6 @@ app.use(express.urlencoded({ extended: true }));
 
 let activeChatModels = [];
 
-// Discover active text chat models from Groq
 async function loadAvailableChatModels() {
   const apiKey = (process.env.GROQ_API_KEY || "").trim();
   if (!apiKey || apiKey.includes("your_")) return;
@@ -52,24 +51,16 @@ async function loadAvailableChatModels() {
         return score(b) - score(a);
       });
     }
-  } catch (err) {
-    // Silent catch
-  }
+  } catch (err) {}
 }
 
 loadAvailableChatModels();
 
-// Endpoint: Return working models
 app.get("/api/models", async (req, res) => {
-  if (activeChatModels.length === 0) {
-    await loadAvailableChatModels();
-  }
-  res.json({
-    models: activeChatModels,
-  });
+  if (activeChatModels.length === 0) await loadAvailableChatModels();
+  res.json({ models: activeChatModels });
 });
 
-// Endpoint: Safe config
 app.get("/api/config", (req, res) => {
   const defaultModel = activeChatModels[0] || "qwen/qwen3.6-27b";
   res.json({
@@ -80,16 +71,15 @@ app.get("/api/config", (req, res) => {
   });
 });
 
-// Endpoint: Chat completion
 app.post("/api/chat", async (req, res) => {
   try {
     const { messages, model } = req.body;
     const apiKey = (process.env.GROQ_API_KEY || "").trim();
 
     if (!apiKey || apiKey.includes("your_")) {
-      return res.status(500).json({
-        error: "Missing Groq API Key in environment variables.",
-      });
+      return res
+        .status(500)
+        .json({ error: "Missing Groq API Key in environment variables." });
     }
 
     let targetModel = model;
@@ -116,18 +106,17 @@ app.post("/api/chat", async (req, res) => {
     );
 
     const data = await response.json();
-
     if (!response.ok) {
-      return res.status(response.status).json({
-        error: data.error?.message || "Error from AI service.",
-      });
+      return res
+        .status(response.status)
+        .json({ error: data.error?.message || "Error from AI service." });
     }
 
     res.json(data);
   } catch (error) {
-    res.status(500).json({
-      error: "Something went wrong. Please try again later.",
-    });
+    res
+      .status(500)
+      .json({ error: "Something went wrong. Please try again later." });
   }
 });
 
