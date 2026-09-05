@@ -68,7 +68,12 @@ async function loadAvailableChatModels() {
 // Initial load
 loadAvailableChatModels();
 
-// Endpoint: Return working models
+// 1. Explicit Root Route for Vercel (Serves index.html directly)
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "index.html"));
+});
+
+// 2. Working models endpoint
 app.get("/api/models", async (req, res) => {
   if (activeChatModels.length === 0) {
     await loadAvailableChatModels();
@@ -78,7 +83,7 @@ app.get("/api/models", async (req, res) => {
   });
 });
 
-// Endpoint: Safe config
+// 3. Public config endpoint
 app.get("/api/config", (req, res) => {
   const defaultModel = activeChatModels[0] || "qwen/qwen3.6-27b";
   res.json({
@@ -89,7 +94,7 @@ app.get("/api/config", (req, res) => {
   });
 });
 
-// Endpoint: Chat completion
+// 4. Chat completion endpoint
 app.post("/api/chat", async (req, res) => {
   try {
     const { messages, model } = req.body;
