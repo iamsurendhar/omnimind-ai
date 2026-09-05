@@ -1,0 +1,743 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+
+    <!-- Primary SEO Meta Tags -->
+    <title>OmniMind AI — Intelligent Assistant</title>
+    <meta name="title" content="OmniMind AI — Intelligent Assistant" />
+    <meta
+      name="description"
+      content="OmniMind AI delivers high-performance prompt generation and state-of-the-art AI intelligence."
+    />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#171717" />
+
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2310b981' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polygon points='12 2 22 8.5 22 15.5 12 22 2 15.5 12 2'/><circle cx='12' cy='12' r='3'/></svg>"
+    />
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              darkSidebar: "#171717",
+              darkBg: "#212121",
+              darkInput: "#2f2f2f",
+              darkHover: "#2a2a2a",
+              lightSidebar: "#f9f9f9",
+              lightBg: "#ffffff",
+              lightInput: "#f4f4f4",
+              lightHover: "#ececec",
+            },
+          },
+        },
+      };
+    </script>
+
+    <!-- Highlight.js for Code Highlighting -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+    <!-- Marked.js for Markdown Rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <!-- External Stylesheet -->
+    <link rel="stylesheet" href="css/style.css" />
+
+    <!-- jQuery & Feather Icons -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+  </head>
+  <body
+    class="bg-lightBg dark:bg-darkBg text-zinc-900 dark:text-gray-100 flex h-screen overflow-hidden font-sans antialiased transition-colors duration-200"
+  >
+    <!-- Mobile Backdrop Overlay -->
+    <div
+      id="sidebar-overlay"
+      class="fixed inset-0 bg-black/60 z-40 hidden md:hidden backdrop-blur-sm transition-opacity"
+    ></div>
+
+    <!-- Left Sidebar -->
+    <aside
+      id="sidebar"
+      class="fixed inset-y-0 left-0 z-50 w-72 md:w-64 bg-lightSidebar dark:bg-darkSidebar flex flex-col justify-between border-r border-zinc-200 dark:border-zinc-800 transform -translate-x-full md:relative md:translate-x-0 transition-all duration-300 ease-in-out shrink-0"
+    >
+      <div class="p-3 flex flex-col h-full relative">
+        <!-- Brand Header -->
+        <div class="flex items-center justify-between mb-3 px-2 pt-1">
+          <div class="flex items-center gap-2">
+            <div
+              class="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-500"
+            >
+              <svg
+                class="w-4 h-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 12 2" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+            </div>
+            <span
+              id="brand-name"
+              class="text-sm font-semibold tracking-wide text-zinc-800 dark:text-zinc-100"
+              >OmniMind AI</span
+            >
+          </div>
+
+          <div class="flex items-center gap-1">
+            <button
+              id="new-chat-top-btn"
+              title="New Chat"
+              class="p-2 hover:bg-lightHover dark:hover:bg-darkHover rounded-lg text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-white transition"
+            >
+              <i data-feather="edit" class="w-4 h-4"></i>
+            </button>
+            <button
+              id="close-sidebar-btn"
+              title="Close Sidebar"
+              class="p-2 hover:bg-lightHover dark:hover:bg-darkHover rounded-lg text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-white md:hidden transition"
+            >
+              <i data-feather="x" class="w-5 h-5"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- New Chat Button -->
+        <button
+          id="new-chat-btn"
+          class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm bg-zinc-200 dark:bg-zinc-800/80 hover:bg-zinc-300 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-100 transition mb-3 border border-zinc-300 dark:border-zinc-700/60 w-full text-left font-medium shadow-sm"
+        >
+          <i
+            data-feather="plus"
+            class="w-4 h-4 text-zinc-600 dark:text-zinc-300"
+          ></i>
+          <span data-i18n="new_chat">New chat</span>
+        </button>
+
+        <!-- History Header -->
+        <div
+          class="text-[11px] font-semibold text-zinc-400 dark:text-zinc-500 px-3 py-1 uppercase tracking-wider"
+          data-i18n="conversations"
+        >
+          Conversations
+        </div>
+
+        <!-- Dynamic Chat List -->
+        <div
+          id="chat-list"
+          class="flex-1 overflow-y-auto space-y-1 py-1 text-sm text-zinc-700 dark:text-zinc-300"
+        ></div>
+
+        <!-- User Profile Section -->
+        <div
+          id="profile-dropdown-container"
+          class="relative pt-2 border-t border-zinc-200 dark:border-zinc-800 mt-auto"
+        >
+          <div
+            id="profile-btn"
+            class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-lightHover dark:hover:bg-darkHover cursor-pointer transition select-none"
+          >
+            <div
+              class="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center font-bold text-xs text-white"
+            >
+              U
+            </div>
+            <div class="flex-1 truncate">
+              <p
+                class="text-sm font-medium text-zinc-800 dark:text-white truncate"
+              >
+                User Account
+              </p>
+            </div>
+            <i
+              data-feather="more-horizontal"
+              class="w-4 h-4 text-zinc-500 dark:text-zinc-400"
+            ></i>
+          </div>
+
+          <div
+            id="profile-menu"
+            class="hidden absolute bottom-14 left-2 right-2 bg-white dark:bg-[#262626] border border-zinc-200 dark:border-zinc-700/80 rounded-2xl shadow-2xl p-1.5 space-y-0.5 z-50"
+          >
+            <button
+              id="open-personalization-btn"
+              class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-700/60 text-xs font-medium text-zinc-800 dark:text-zinc-200 transition"
+            >
+              <i data-feather="sliders" class="w-4 h-4 text-zinc-400"></i>
+              <span data-i18n="personalization">Personalization</span>
+            </button>
+            <button
+              id="open-profile-btn"
+              class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-700/60 text-xs font-medium text-zinc-800 dark:text-zinc-200 transition"
+            >
+              <i data-feather="user" class="w-4 h-4 text-zinc-400"></i>
+              <span data-i18n="profile">Profile</span>
+            </button>
+            <button
+              id="open-settings-btn"
+              class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-700/60 text-xs font-medium text-zinc-800 dark:text-zinc-200 transition"
+            >
+              <i data-feather="settings" class="w-4 h-4 text-zinc-400"></i>
+              <span data-i18n="settings">Settings</span>
+            </button>
+            <div
+              class="border-t border-zinc-200 dark:border-zinc-700 my-1"
+            ></div>
+            <button
+              id="open-help-btn"
+              class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-700/60 text-xs font-medium text-zinc-800 dark:text-zinc-200 transition"
+            >
+              <div class="flex items-center gap-3">
+                <i data-feather="help-circle" class="w-4 h-4 text-zinc-400"></i>
+                <span data-i18n="help">Help</span>
+              </div>
+              <i
+                data-feather="chevron-right"
+                class="w-3.5 h-3.5 text-zinc-400"
+              ></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Chat Workspace -->
+    <main
+      class="flex-1 flex flex-col h-full w-full relative overflow-hidden bg-lightBg dark:bg-darkBg"
+    >
+      <!-- Top Header -->
+      <header
+        class="h-14 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between px-3 md:px-4 bg-lightBg/90 dark:bg-darkBg/90 backdrop-blur z-20"
+      >
+        <div class="flex items-center gap-1.5 md:gap-2">
+          <button
+            id="toggle-sidebar"
+            class="p-2 hover:bg-lightHover dark:hover:bg-darkHover rounded-lg text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-white transition"
+            title="Toggle Sidebar"
+          >
+            <i data-feather="menu" class="w-5 h-5 md:hidden"></i>
+            <i data-feather="sidebar" class="w-5 h-5 hidden md:block"></i>
+          </button>
+
+          <!-- Model Selector Dropdown -->
+          <div id="model-dropdown-container" class="relative">
+            <button
+              id="model-btn"
+              class="font-semibold text-zinc-800 dark:text-zinc-200 text-sm flex items-center gap-1.5 cursor-pointer hover:bg-lightHover dark:hover:bg-darkHover px-2.5 py-1.5 rounded-lg transition select-none"
+            >
+              <span id="current-model-label">qwen3.6-27b</span>
+              <span
+                id="current-model-tag"
+                class="text-xs text-zinc-400 font-normal"
+                >Free / Groq</span
+              >
+              <i
+                data-feather="chevron-down"
+                class="w-3.5 h-3.5 text-zinc-400"
+              ></i>
+            </button>
+
+            <div
+              id="model-menu"
+              class="hidden absolute top-11 left-0 w-64 bg-white dark:bg-[#262626] border border-zinc-200 dark:border-zinc-700/80 rounded-2xl shadow-2xl p-2 space-y-1 z-50"
+            ></div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button
+            id="quick-settings-btn"
+            class="p-2 hover:bg-lightHover dark:hover:bg-darkHover rounded-lg text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-white transition"
+            title="Settings"
+          >
+            <i data-feather="settings" class="w-4 h-4"></i>
+          </button>
+          <button
+            id="mobile-new-chat-btn"
+            class="p-2 hover:bg-lightHover dark:hover:bg-darkHover rounded-lg text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-white md:hidden transition"
+          >
+            <i data-feather="edit" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </header>
+
+      <!-- Chat Area -->
+      <div class="flex-1 flex flex-col h-full overflow-hidden">
+        <div id="chat-stream" class="flex-1 overflow-y-auto px-4">
+          <!-- Welcome Hero State -->
+          <div
+            id="empty-state"
+            class="flex flex-col items-center justify-center min-h-[70vh] text-center max-w-2xl mx-auto py-8"
+          >
+            <div
+              class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mb-5 shadow-sm text-emerald-500"
+            >
+              <svg
+                class="w-6 h-6"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 12 2" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+            </div>
+            <h1
+              class="text-xl md:text-2xl font-semibold text-zinc-800 dark:text-zinc-100 mb-6"
+              data-i18n="hero_title"
+            >
+              What can I help with today?
+            </h1>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full text-left">
+              <button
+                class="prompt-chip p-3.5 rounded-2xl border border-zinc-200 dark:border-zinc-700/60 bg-lightInput dark:bg-darkInput/40 hover:bg-lightHover dark:hover:bg-darkInput transition text-xs text-zinc-700 dark:text-zinc-300"
+              >
+                <span
+                  class="font-medium text-zinc-900 dark:text-zinc-100 block mb-1"
+                  >Web Development</span
+                >
+                Create a modern responsive calculator with HTML, CSS, and JS
+              </button>
+              <button
+                class="prompt-chip p-3.5 rounded-2xl border border-zinc-200 dark:border-zinc-700/60 bg-lightInput dark:bg-darkInput/40 hover:bg-lightHover dark:hover:bg-darkInput transition text-xs text-zinc-700 dark:text-zinc-300"
+              >
+                <span
+                  class="font-medium text-zinc-900 dark:text-zinc-100 block mb-1"
+                  >Architecture Design</span
+                >
+                Design a scalable Node.js microservice architecture
+              </button>
+            </div>
+          </div>
+
+          <!-- Messages Container -->
+          <div
+            id="messages-container"
+            class="max-w-2xl mx-auto space-y-4 py-6 hidden"
+          ></div>
+        </div>
+
+        <!-- Floating Bottom Input Bar -->
+        <footer class="w-full max-w-2xl mx-auto px-4 pb-4">
+          <form
+            id="chat-form"
+            class="flex items-center gap-2 bg-lightInput dark:bg-darkInput rounded-3xl border border-zinc-300 dark:border-zinc-700/60 focus-within:border-zinc-400 dark:focus-within:border-zinc-500 shadow-sm dark:shadow-lg px-4 py-2 transition min-h-[52px]"
+          >
+            <textarea
+              id="user-input"
+              rows="1"
+              placeholder="Message OmniMind..."
+              data-i18n-placeholder="input_placeholder"
+              class="flex-1 bg-transparent text-sm text-zinc-800 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none resize-none leading-relaxed py-1.5 max-h-36 overflow-y-auto block"
+            ></textarea>
+
+            <button
+              type="button"
+              id="clear-input-btn"
+              class="hidden p-1 hover:text-zinc-800 dark:hover:text-zinc-100 text-zinc-400 transition my-auto"
+              title="Clear input"
+            >
+              <i data-feather="x" class="w-4 h-4"></i>
+            </button>
+
+            <button
+              type="submit"
+              id="send-btn"
+              disabled
+              class="w-8 h-8 rounded-full bg-black dark:bg-white disabled:bg-zinc-300 dark:disabled:bg-zinc-600 text-white dark:text-black disabled:text-zinc-500 dark:disabled:text-zinc-400 flex items-center justify-center shrink-0 transition disabled:cursor-not-allowed my-auto"
+            >
+              <i data-feather="arrow-up" class="w-4 h-4"></i>
+            </button>
+          </form>
+          <p
+            class="text-[11px] text-center text-zinc-500 mt-2"
+            data-i18n="disclaimer"
+          >
+            OmniMind AI can make mistakes. Verify important information.
+          </p>
+        </footer>
+      </div>
+    </main>
+
+    <!-- Live Browser Preview Modal -->
+    <div
+      id="live-preview-modal"
+      class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-3 md:p-6 hidden backdrop-blur-md"
+    >
+      <div
+        class="bg-[#18181b] border border-zinc-700 rounded-2xl w-full max-w-5xl h-[90vh] overflow-hidden shadow-2xl flex flex-col"
+      >
+        <div
+          class="h-12 border-b border-zinc-800 px-4 flex items-center justify-between bg-[#121214]"
+        >
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
+            <span
+              class="w-3 h-3 rounded-full bg-yellow-500 inline-block"
+            ></span>
+            <span class="w-3 h-3 rounded-full bg-green-500 inline-block"></span>
+            <span class="text-xs font-semibold text-zinc-300 ml-2"
+              >Live Web Preview</span
+            >
+          </div>
+          <div class="flex items-center gap-2">
+            <button
+              id="refresh-preview-btn"
+              class="px-2.5 py-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs rounded-lg flex items-center gap-1 transition"
+            >
+              <i data-feather="refresh-cw" class="w-3 h-3"></i>
+              <span>Refresh</span>
+            </button>
+            <button
+              class="close-modal-btn p-1.5 hover:bg-zinc-800 rounded-lg text-zinc-400 hover:text-white transition"
+            >
+              <i data-feather="x" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+        <div class="flex-1 bg-white overflow-hidden relative">
+          <iframe
+            id="live-preview-frame"
+            class="w-full h-full border-none"
+            sandbox="allow-scripts allow-same-origin"
+          ></iframe>
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div
+      id="settings-modal"
+      class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 hidden backdrop-blur-sm"
+    >
+      <div
+        class="bg-white dark:bg-[#262626] border border-zinc-200 dark:border-zinc-700 rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl flex flex-col"
+      >
+        <div
+          class="flex items-center justify-between px-6 py-4 border-b border-zinc-200 dark:border-zinc-700"
+        >
+          <h2 class="text-base font-semibold" data-i18n="settings">Settings</h2>
+          <button
+            id="close-settings-btn"
+            class="p-1 hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded-lg text-zinc-400 hover:text-zinc-800 dark:hover:text-white transition"
+          >
+            <i data-feather="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <div class="p-6 space-y-5">
+          <!-- 1. Theme Setting -->
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <label
+                class="text-sm font-medium text-zinc-800 dark:text-zinc-200 block"
+                data-i18n="theme"
+                >Theme</label
+              >
+              <p class="text-xs text-zinc-500" data-i18n="theme_desc">
+                Switch light / dark mode
+              </p>
+            </div>
+            <div class="relative shrink-0">
+              <select
+                id="theme-select"
+                class="w-36 appearance-none bg-zinc-100 dark:bg-[#1f1f1f] border border-zinc-300 dark:border-zinc-700 text-zinc-800 dark:text-zinc-200 text-xs font-medium rounded-xl pl-3 pr-8 py-2.5 cursor-pointer focus:outline-none"
+              >
+                <option value="dark">Dark</option>
+                <option value="light">Light</option>
+              </select>
+              <i
+                data-feather="chevron-down"
+                class="w-4 h-4 text-zinc-400 pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2"
+              ></i>
+            </div>
+          </div>
+
+          <div class="border-t border-zinc-200 dark:border-zinc-700/60"></div>
+
+          <!-- 2. Language Setting -->
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <label
+                class="text-sm font-medium text-zinc-800 dark:text-zinc-200 block"
+                data-i18n="language"
+                >Language</label
+              >
+              <p class="text-xs text-zinc-500" data-i18n="language_desc">
+                Select your preferred user interface language
+              </p>
+            </div>
+            <div class="relative shrink-0">
+              <select
+                id="language-select"
+                class="w-36 appearance-none bg-zinc-100 dark:bg-[#1f1f1f] border border-zinc-300 dark:border-zinc-700 text-zinc-800 dark:text-zinc-200 text-xs font-medium rounded-xl pl-3 pr-8 py-2.5 cursor-pointer focus:outline-none"
+              >
+                <option value="en">English</option>
+                <option value="ta">Tamil (தமிழ்)</option>
+                <option value="es">Spanish (Español)</option>
+                <option value="fr">French (Français)</option>
+                <option value="de">German (Deutsch)</option>
+              </select>
+              <i
+                data-feather="chevron-down"
+                class="w-4 h-4 text-zinc-400 pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2"
+              ></i>
+            </div>
+          </div>
+
+          <div class="border-t border-zinc-200 dark:border-zinc-700/60"></div>
+
+          <!-- 3. Clear all chats -->
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <label
+                class="text-sm font-medium text-zinc-800 dark:text-zinc-200 block"
+                data-i18n="clear_chats"
+                >Clear all chats</label
+              >
+              <p class="text-xs text-zinc-500" data-i18n="clear_chats_desc">
+                Permanently delete all conversation records
+              </p>
+            </div>
+            <button
+              id="clear-all-chats-btn"
+              class="w-20 py-2 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white text-xs font-semibold rounded-xl transition"
+              data-i18n="clear"
+            >
+              Clear
+            </button>
+          </div>
+        </div>
+
+        <div
+          class="px-6 py-3.5 bg-zinc-50 dark:bg-zinc-900 border-t border-zinc-200 dark:border-zinc-800 flex justify-end"
+        >
+          <button
+            id="done-settings-btn"
+            class="px-5 py-2 bg-black dark:bg-white text-white dark:text-black text-xs font-semibold rounded-xl hover:opacity-90 transition"
+            data-i18n="done"
+          >
+            Done
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Personalization Modal -->
+    <div
+      id="personalization-modal"
+      class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 hidden backdrop-blur-sm"
+    >
+      <div
+        class="bg-white dark:bg-[#262626] border border-zinc-200 dark:border-zinc-700 rounded-2xl w-full max-w-lg p-6 shadow-2xl space-y-4"
+      >
+        <div
+          class="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-700 pb-3"
+        >
+          <h3
+            class="text-sm font-semibold text-zinc-800 dark:text-zinc-100"
+            data-i18n="personalization"
+          >
+            Personalization
+          </h3>
+          <button
+            class="close-modal-btn text-zinc-400 hover:text-zinc-800 dark:hover:text-white"
+          >
+            <i data-feather="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+        <div>
+          <label
+            class="text-xs font-medium text-zinc-500 dark:text-zinc-400 block mb-1.5"
+            >What would you like OmniMind to know about you to provide better
+            responses?</label
+          >
+          <textarea
+            id="custom-instructions"
+            rows="4"
+            placeholder="e.g. Always explain code in Tamil, prefer clean Python code, keep answers concise..."
+            class="w-full bg-lightInput dark:bg-darkInput border border-zinc-300 dark:border-zinc-700 rounded-xl p-3 text-xs text-zinc-800 dark:text-zinc-100 focus:outline-none"
+          ></textarea>
+        </div>
+        <div class="flex justify-end gap-2 text-xs pt-2">
+          <button
+            class="close-modal-btn px-4 py-2 rounded-xl bg-zinc-200 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-300"
+            data-i18n="cancel"
+          >
+            Cancel
+          </button>
+          <button
+            id="save-personalization-btn"
+            class="px-4 py-2 rounded-xl bg-black dark:bg-white text-white dark:text-black font-semibold"
+            data-i18n="save"
+          >
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div
+      id="profile-modal"
+      class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 hidden backdrop-blur-sm"
+    >
+      <div
+        class="bg-white dark:bg-[#262626] border border-zinc-200 dark:border-zinc-700 rounded-2xl w-full max-w-md p-6 shadow-2xl space-y-4"
+      >
+        <div
+          class="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-700 pb-3"
+        >
+          <h3
+            class="text-sm font-semibold text-zinc-800 dark:text-zinc-100"
+            data-i18n="profile"
+          >
+            User Profile
+          </h3>
+          <button
+            class="close-modal-btn text-zinc-400 hover:text-zinc-800 dark:hover:text-white"
+          >
+            <i data-feather="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+        <div class="flex items-center gap-4 py-2">
+          <div
+            class="w-14 h-14 rounded-full bg-emerald-600 flex items-center justify-center font-bold text-lg text-white"
+          >
+            U
+          </div>
+          <div>
+            <h4 class="text-sm font-semibold text-zinc-800 dark:text-zinc-100">
+              User Account
+            </h4>
+            <p class="text-xs text-zinc-500">user@example.com</p>
+            <span
+              class="inline-block mt-1 bg-emerald-500/10 text-emerald-500 text-[10px] px-2 py-0.5 rounded-md font-medium"
+              >Standard License</span
+            >
+          </div>
+        </div>
+        <div class="flex justify-end text-xs pt-2">
+          <button
+            class="close-modal-btn px-4 py-2 rounded-xl bg-black dark:bg-white text-white dark:text-black font-semibold"
+            data-i18n="done"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div
+      id="help-modal"
+      class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 hidden backdrop-blur-sm"
+    >
+      <div
+        class="bg-white dark:bg-[#262626] border border-zinc-200 dark:border-zinc-700 rounded-2xl w-full max-w-md p-6 shadow-2xl space-y-4"
+      >
+        <div
+          class="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-700 pb-3"
+        >
+          <h3
+            class="text-sm font-semibold text-zinc-800 dark:text-zinc-100"
+            data-i18n="help"
+          >
+            Help & Support
+          </h3>
+          <button
+            class="close-modal-btn text-zinc-400 hover:text-zinc-800 dark:hover:text-white"
+          >
+            <i data-feather="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+        <div class="space-y-2 text-xs text-zinc-700 dark:text-zinc-300">
+          <p
+            class="p-2.5 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-700/50 cursor-pointer flex items-center justify-between"
+          >
+            <span>Documentation & Guide</span>
+            <i
+              data-feather="external-link"
+              class="w-3.5 h-3.5 text-zinc-400"
+            ></i>
+          </p>
+          <p
+            class="p-2.5 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-700/50 cursor-pointer flex items-center justify-between"
+          >
+            <span>Keyboard Shortcuts</span>
+            <span class="text-zinc-500 font-mono">Enter to Send</span>
+          </p>
+          <p
+            class="p-2.5 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-700/50 cursor-pointer flex items-center justify-between"
+          >
+            <span>Terms & Privacy</span>
+            <i
+              data-feather="external-link"
+              class="w-3.5 h-3.5 text-zinc-400"
+            ></i>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rename Chat Modal -->
+    <div
+      id="rename-modal"
+      class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 hidden backdrop-blur-sm"
+    >
+      <div
+        class="bg-white dark:bg-[#262626] border border-zinc-200 dark:border-zinc-700 rounded-2xl w-full max-w-md p-5 shadow-2xl space-y-4"
+      >
+        <h3
+          class="text-sm font-semibold text-zinc-800 dark:text-zinc-100"
+          data-i18n="rename_chat"
+        >
+          Rename Conversation
+        </h3>
+        <input
+          type="text"
+          id="rename-input"
+          class="w-full bg-lightInput dark:bg-darkInput border border-zinc-300 dark:border-zinc-700 rounded-xl px-4 py-2.5 text-sm text-zinc-800 dark:text-zinc-100 focus:outline-none"
+        />
+        <div class="flex justify-end gap-2 text-xs">
+          <button
+            id="cancel-rename-btn"
+            class="px-4 py-2 rounded-lg bg-zinc-200 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-300"
+            data-i18n="cancel"
+          >
+            Cancel
+          </button>
+          <button
+            id="save-rename-btn"
+            class="px-4 py-2 rounded-lg bg-black dark:bg-white text-white dark:text-black font-semibold"
+            data-i18n="save"
+          >
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- External JavaScript -->
+    <script src="js/app.js"></script>
+  </body>
+</html>
