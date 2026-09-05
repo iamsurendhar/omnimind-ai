@@ -89,7 +89,7 @@ Designed with a single-file static frontend and a serverless backend, OmniMind A
 ```
 [ User Browser (Client) ]
         │
-        ├──► Static UI: Single-file HTML (public/index.html)
+        ├──► Static UI: Single-file HTML (index.html)
         │
         └──► AJAX POST /api/chat
                     │
@@ -120,8 +120,7 @@ omnimind-ai/
 │
 ├── api/
 │   └── index.js          # Express backend API handler & Groq proxy
-├── public/
-│   └── index.html        # Complete frontend application (UI, CSS, JS)
+├── index.html        # Complete frontend application (UI, CSS, JS)
 │
 ├── .env                  # Local secret environment variables (Never committed)
 ├── .gitignore            # Git exclusion rules (Protects .env & node_modules)
@@ -319,7 +318,7 @@ npm test
 
 ### Verified Test Cases:
 
-- **Root Route (`GET /`):** Verifies `public/index.html` is properly served with `200 OK`.
+- **Root Route (`GET /`):** Verifies `/index.html` is properly served with `200 OK`.
 - **Config Endpoint (`GET /api/config`):** Validates the JSON schema and provider settings.
 - **Models Endpoint (`GET /api/models`):** Ensures an array of working chat models is returned.
 - **Chat Endpoint (`POST /api/chat`):** Verifies request validation and API payload handling.
@@ -339,7 +338,7 @@ npm test
 
 **1. Why does Vercel return `Cannot GET /`?**
 
-Ensure your `vercel.json` includes the root routing rule and `api/index.js` contains the root `app.get('/', ...)` handler pointing to `public/index.html`.
+Ensure your `vercel.json` includes the root routing rule and `api/index.js` contains the root `app.get('/', ...)` handler pointing to `index.html`.
 
 **2. Why did I get a `model_not_found` error?**
 
