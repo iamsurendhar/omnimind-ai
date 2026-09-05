@@ -3,10 +3,20 @@
  */
 const assert = require("assert");
 const http = require("http");
-const app = require("./server");
+const express = require("express");
+const path = require("path");
+const apiApp = require("./api/index");
 
 const TEST_PORT = 3099;
 let server;
+
+// Create local test server binding public static files and API routes
+const testApp = express();
+testApp.use(express.static(path.join(__dirname, "public")));
+testApp.use(apiApp);
+testApp.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
 
 function makeRequest(options, postData = null) {
   return new Promise((resolve, reject) => {
@@ -38,7 +48,7 @@ async function runTests() {
   console.log("   Running OmniMind AI Automated Test Suite");
   console.log("===========================================\n");
 
-  server = app.listen(TEST_PORT);
+  server = testApp.listen(TEST_PORT);
 
   try {
     // Test 1: Root Route (GET /)
@@ -58,7 +68,7 @@ async function runTests() {
       rootRes.body.includes("OmniMind AI"),
       "Root HTML should contain 'OmniMind AI'",
     );
-    console.log("  ✔ Passed: Root route serves index.html correctly.\n");
+    console.log("  ✔ Passed: Root route serves public/index.html correctly.\n");
 
     // Test 2: Configuration Route (GET /api/config)
     console.log(
@@ -120,7 +130,6 @@ async function runTests() {
         model: "qwen/qwen3.6-27b",
       },
     );
-    // Should return 200 if valid key or 500 with friendly JSON error if missing key
     assert(
       [200, 500].includes(chatRes.statusCode),
       "Chat API should handle request gracefully",
