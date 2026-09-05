@@ -3,20 +3,10 @@
  */
 const assert = require("assert");
 const http = require("http");
-const express = require("express");
-const path = require("path");
-const apiApp = require("./api/index");
+const app = require("./api/index");
 
 const TEST_PORT = 3099;
 let server;
-
-// Create local test server binding public static files and API routes
-const testApp = express();
-testApp.use(express.static(path.join(__dirname, "public")));
-testApp.use(apiApp);
-testApp.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
-});
 
 function makeRequest(options, postData = null) {
   return new Promise((resolve, reject) => {
@@ -48,7 +38,7 @@ async function runTests() {
   console.log("   Running OmniMind AI Automated Test Suite");
   console.log("===========================================\n");
 
-  server = testApp.listen(TEST_PORT);
+  server = app.listen(TEST_PORT);
 
   try {
     // Test 1: Root Route (GET /)
@@ -68,7 +58,7 @@ async function runTests() {
       rootRes.body.includes("OmniMind AI"),
       "Root HTML should contain 'OmniMind AI'",
     );
-    console.log("  ✔ Passed: Root route serves public/index.html correctly.\n");
+    console.log("  ✔ Passed: Root route serves index.html correctly.\n");
 
     // Test 2: Configuration Route (GET /api/config)
     console.log(
@@ -111,7 +101,7 @@ async function runTests() {
     );
     console.log("  ✔ Passed: Models endpoint returns active model list.\n");
 
-    // Test 4: Chat Endpoint Input Validation (POST /api/chat)
+    // Test 4: Chat Endpoint Validation (POST /api/chat)
     console.log(
       "▶ [Test 4] Testing Chat Completion Endpoint Validation (POST /api/chat)...",
     );
