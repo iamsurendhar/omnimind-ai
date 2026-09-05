@@ -120,8 +120,7 @@ omnimind-ai/
 │
 ├── api/
 │   └── index.js          # Express backend API handler & Groq proxy
-├── index.html        # Complete frontend application (UI, CSS, JS)
-│
+├── index.html            # Complete frontend application (UI, CSS, JS)
 ├── .env                  # Local secret environment variables (Never committed)
 ├── .gitignore            # Git exclusion rules (Protects .env & node_modules)
 ├── vercel.json           # Vercel serverless routing & bundle configurations
