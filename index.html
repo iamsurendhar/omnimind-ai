@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
     />
 
     <title>OmniMind AI — Intelligent Assistant</title>
@@ -56,11 +56,11 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://unpkg.com/feather-icons"></script>
 
-    <!-- Complete Inlined Styles (Guarantees zero stylesheet 404s on Vercel) -->
+    <!-- Inlined Styles optimized for mobile viewports -->
     <style>
       ::-webkit-scrollbar {
-        width: 6px;
-        height: 6px;
+        width: 5px;
+        height: 5px;
       }
       ::-webkit-scrollbar-track {
         background: transparent;
@@ -80,37 +80,40 @@
         background: #a1a1aa;
       }
 
+      /* Fix full height for mobile viewports including virtual keyboard */
       html,
       body {
         height: 100%;
+        height: 100dvh;
         margin: 0;
         padding: 0;
+        overflow: hidden;
         overscroll-behavior: none;
       }
 
       .msg-ai-body {
         color: inherit;
-        line-height: 1.65;
+        line-height: 1.6;
         font-size: 0.88rem;
       }
       .msg-ai-body p {
-        margin-bottom: 0.85rem;
-        line-height: 1.65;
+        margin-bottom: 0.75rem;
+        line-height: 1.6;
       }
       .msg-ai-body p:last-child {
         margin-bottom: 0;
       }
       .msg-ai-body ul {
         list-style-type: disc;
-        margin: 0.5rem 0 0.85rem 1.4rem;
+        margin: 0.4rem 0 0.75rem 1.2rem;
       }
       .msg-ai-body ol {
         list-style-type: decimal;
-        margin: 0.5rem 0 0.85rem 1.4rem;
+        margin: 0.4rem 0 0.75rem 1.2rem;
       }
       .msg-ai-body li {
-        margin-bottom: 0.35rem;
-        line-height: 1.6;
+        margin-bottom: 0.3rem;
+        line-height: 1.5;
       }
       .msg-ai-body strong {
         font-weight: 600;
@@ -119,14 +122,14 @@
       .msg-ai-body table {
         width: 100%;
         border-collapse: collapse;
-        margin: 0.85rem 0;
+        margin: 0.75rem 0;
         font-size: 0.82rem;
         border-radius: 0.5rem;
         overflow: hidden;
       }
       .msg-ai-body th,
       .msg-ai-body td {
-        padding: 0.5rem 0.75rem;
+        padding: 0.4rem 0.6rem;
         border: 1px solid #d4d4d8;
         text-align: left;
       }
@@ -146,23 +149,23 @@
 
       .code-container {
         width: 100%;
-        margin: 0.85rem 0;
-        border-radius: 0.85rem;
+        margin: 0.75rem 0;
+        border-radius: 0.75rem;
         overflow: hidden;
-        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         border: 1px solid #e4e4e7;
         background-color: #f8fafc;
       }
       .dark .code-container {
         border: 1px solid #27272a;
         background-color: #0d1117;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
       }
       .code-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 0.45rem 1rem;
+        padding: 0.4rem 0.85rem;
         background-color: #f1f5f9;
         border-bottom: 1px solid #e2e8f0;
         user-select: none;
@@ -176,7 +179,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 0.35rem;
+        padding: 0.3rem;
         border-radius: 0.4rem;
         color: #64748b;
         background: transparent;
@@ -207,9 +210,9 @@
       }
       .code-container pre.code-content-block {
         margin: 0 !important;
-        padding: 1rem !important;
-        font-size: 0.82rem !important;
-        line-height: 1.55 !important;
+        padding: 0.85rem !important;
+        font-size: 0.8rem !important;
+        line-height: 1.5 !important;
         background-color: #f8fafc !important;
         color: #0f172a !important;
         overflow-x: auto !important;
@@ -239,7 +242,7 @@
     </style>
   </head>
   <body
-    class="bg-lightBg dark:bg-darkBg text-zinc-900 dark:text-gray-100 flex h-screen overflow-hidden font-sans antialiased transition-colors duration-200"
+    class="bg-lightBg dark:bg-darkBg text-zinc-900 dark:text-gray-100 flex h-[100dvh] w-screen overflow-hidden font-sans antialiased transition-colors duration-200"
   >
     <!-- Mobile Backdrop Overlay -->
     <div
@@ -321,7 +324,7 @@
           class="flex-1 overflow-y-auto space-y-1 py-1 text-sm text-zinc-700 dark:text-zinc-300"
         ></div>
 
-        <!-- User Profile Dropdown -->
+        <!-- User Profile Section -->
         <div
           id="profile-dropdown-container"
           class="relative pt-2 border-t border-zinc-200 dark:border-zinc-800 mt-auto"
@@ -400,7 +403,7 @@
     >
       <!-- Top Header -->
       <header
-        class="h-14 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between px-3 md:px-4 bg-lightBg/90 dark:bg-darkBg/90 backdrop-blur z-20"
+        class="h-14 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between px-3 md:px-4 bg-lightBg/90 dark:bg-darkBg/90 backdrop-blur z-20 shrink-0"
       >
         <div class="flex items-center gap-1.5 md:gap-2">
           <button
@@ -453,16 +456,17 @@
         </div>
       </header>
 
-      <!-- Chat Area -->
-      <div class="flex-1 flex flex-col h-full overflow-hidden">
+      <!-- Chat Area Wrapper (Flex column taking remaining height) -->
+      <div class="flex-1 flex flex-col h-full overflow-hidden relative">
+        <!-- Scrollable Message Stream -->
         <div id="chat-stream" class="flex-1 overflow-y-auto px-4">
           <!-- Welcome Hero State -->
           <div
             id="empty-state"
-            class="flex flex-col items-center justify-center min-h-[70vh] text-center max-w-2xl mx-auto py-8"
+            class="flex flex-col items-center justify-center min-h-[60vh] text-center max-w-2xl mx-auto py-6"
           >
             <div
-              class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mb-5 shadow-sm text-emerald-500"
+              class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mb-4 shadow-sm text-emerald-500"
             >
               <svg
                 class="w-6 h-6"
@@ -476,15 +480,17 @@
               </svg>
             </div>
             <h1
-              class="text-xl md:text-2xl font-semibold text-zinc-800 dark:text-zinc-100 mb-6"
+              class="text-lg md:text-2xl font-semibold text-zinc-800 dark:text-zinc-100 mb-4"
               data-i18n="hero_title"
             >
               What can I help with today?
             </h1>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full text-left">
+            <div
+              class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 w-full text-left"
+            >
               <button
-                class="prompt-chip p-3.5 rounded-2xl border border-zinc-200 dark:border-zinc-700/60 bg-lightInput dark:bg-darkInput/40 hover:bg-lightHover dark:hover:bg-darkInput transition text-xs text-zinc-700 dark:text-zinc-300"
+                class="prompt-chip p-3 rounded-2xl border border-zinc-200 dark:border-zinc-700/60 bg-lightInput dark:bg-darkInput/40 hover:bg-lightHover dark:hover:bg-darkInput transition text-xs text-zinc-700 dark:text-zinc-300"
               >
                 <span
                   class="font-medium text-zinc-900 dark:text-zinc-100 block mb-1"
@@ -493,7 +499,7 @@
                 Create a modern responsive calculator with HTML, CSS, and JS
               </button>
               <button
-                class="prompt-chip p-3.5 rounded-2xl border border-zinc-200 dark:border-zinc-700/60 bg-lightInput dark:bg-darkInput/40 hover:bg-lightHover dark:hover:bg-darkInput transition text-xs text-zinc-700 dark:text-zinc-300"
+                class="prompt-chip p-3 rounded-2xl border border-zinc-200 dark:border-zinc-700/60 bg-lightInput dark:bg-darkInput/40 hover:bg-lightHover dark:hover:bg-darkInput transition text-xs text-zinc-700 dark:text-zinc-300"
               >
                 <span
                   class="font-medium text-zinc-900 dark:text-zinc-100 block mb-1"
@@ -507,22 +513,24 @@
           <!-- Messages Container -->
           <div
             id="messages-container"
-            class="max-w-2xl mx-auto space-y-4 py-6 hidden"
+            class="max-w-2xl mx-auto space-y-4 py-4 hidden"
           ></div>
         </div>
 
-        <!-- Floating Bottom Input Bar -->
-        <footer class="w-full max-w-2xl mx-auto px-4 pb-4">
+        <!-- Fixed Bottom Input Bar (Shrink-0 ensures it never collapses on mobile keyboards) -->
+        <footer
+          class="w-full max-w-2xl mx-auto px-3 md:px-4 pb-3 md:pb-4 shrink-0 bg-lightBg dark:bg-darkBg"
+        >
           <form
             id="chat-form"
-            class="flex items-center gap-2 bg-lightInput dark:bg-darkInput rounded-3xl border border-zinc-300 dark:border-zinc-700/60 focus-within:border-zinc-400 dark:focus-within:border-zinc-500 shadow-sm dark:shadow-lg px-4 py-2 transition min-h-[52px]"
+            class="flex items-center gap-2 bg-lightInput dark:bg-darkInput rounded-3xl border border-zinc-300 dark:border-zinc-700/60 focus-within:border-zinc-400 dark:focus-within:border-zinc-500 shadow-sm dark:shadow-lg px-3.5 py-2 transition min-h-[48px]"
           >
             <textarea
               id="user-input"
               rows="1"
               placeholder="Message OmniMind..."
               data-i18n-placeholder="input_placeholder"
-              class="flex-1 bg-transparent text-sm text-zinc-800 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none resize-none leading-relaxed py-1.5 max-h-36 overflow-y-auto block"
+              class="flex-1 bg-transparent text-sm text-zinc-800 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none resize-none leading-relaxed py-1.5 max-h-32 overflow-y-auto block"
             ></textarea>
 
             <button
@@ -544,7 +552,7 @@
             </button>
           </form>
           <p
-            class="text-[11px] text-center text-zinc-500 mt-2"
+            class="text-[10px] md:text-[11px] text-center text-zinc-500 mt-1.5"
             data-i18n="disclaimer"
           >
             OmniMind AI can make mistakes. Verify important information.
@@ -746,7 +754,7 @@
           <textarea
             id="custom-instructions"
             rows="4"
-            placeholder="e.g. Always explain code in Tamil, prefer clean Python code, keep answers concise..."
+            placeholder="e.g. Always explain code in Tamil, prefer clean Python code..."
             class="w-full bg-lightInput dark:bg-darkInput border border-zinc-300 dark:border-zinc-700 rounded-xl p-3 text-xs text-zinc-800 dark:text-zinc-100 focus:outline-none"
           ></textarea>
         </div>
@@ -909,7 +917,7 @@
       </div>
     </div>
 
-    <!-- Inlined Application Logic (Zero Script 404s guaranteed) -->
+    <!-- Application Script -->
     <script>
       $(document).ready(function () {
         feather.replace();
@@ -919,7 +927,7 @@
           gfm: true,
         });
 
-        const STORAGE_KEY = "omnimind_ai_v15_chats";
+        const STORAGE_KEY = "omnimind_ai_v16_chats";
 
         let currentModel = "qwen/qwen3.6-27b";
         let currentTheme = localStorage.getItem("omnimind_theme") || "dark";
@@ -1808,7 +1816,6 @@
             const newChat = {
               id: "chat-" + Date.now(),
               title: "New chat",
-              pinned: false,
               createdAt: Date.now(),
               messages: [],
             };
