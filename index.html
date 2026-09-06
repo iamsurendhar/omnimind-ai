@@ -11,7 +11,7 @@
     <meta name="title" content="OmniMind AI — Intelligent Assistant" />
     <meta
       name="description"
-      content="OmniMind AI delivers high-performance prompt generation and state-of-the-art AI intelligence."
+      content="OmniMind AI delivers high-performance prompt generation and AI intelligence."
     />
     <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#171717" />
@@ -22,27 +22,8 @@
       href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2310b981' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polygon points='12 2 22 8.5 22 15.5 12 22 2 15.5 12 2'/><circle cx='12' cy='12' r='3'/></svg>"
     />
 
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            colors: {
-              darkSidebar: "#171717",
-              darkBg: "#212121",
-              darkInput: "#2f2f2f",
-              darkHover: "#2a2a2a",
-              lightSidebar: "#f9f9f9",
-              lightBg: "#ffffff",
-              lightInput: "#f4f4f4",
-              lightHover: "#ececec",
-            },
-          },
-        },
-      };
-    </script>
+    <!-- Tailwind CSS v4 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
     <!-- Highlight.js & Marked.js -->
     <link
@@ -56,7 +37,6 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://unpkg.com/feather-icons"></script>
 
-    <!-- Inlined Styles optimized for mobile viewports -->
     <style>
       ::-webkit-scrollbar {
         width: 5px;
@@ -80,7 +60,6 @@
         background: #a1a1aa;
       }
 
-      /* Fix full height for mobile viewports including virtual keyboard */
       html,
       body {
         height: 100%;
@@ -242,7 +221,7 @@
     </style>
   </head>
   <body
-    class="bg-lightBg dark:bg-darkBg text-zinc-900 dark:text-gray-100 flex h-[100dvh] w-screen overflow-hidden font-sans antialiased transition-colors duration-200"
+    class="bg-white dark:bg-[#212121] text-zinc-900 dark:text-gray-100 flex h-[100dvh] w-screen overflow-hidden font-sans antialiased transition-colors duration-200"
   >
     <!-- Mobile Backdrop Overlay -->
     <div
@@ -253,7 +232,7 @@
     <!-- Left Sidebar -->
     <aside
       id="sidebar"
-      class="fixed inset-y-0 left-0 z-50 w-72 md:w-64 bg-lightSidebar dark:bg-darkSidebar flex flex-col justify-between border-r border-zinc-200 dark:border-zinc-800 transform -translate-x-full md:relative md:translate-x-0 transition-all duration-300 ease-in-out shrink-0"
+      class="fixed inset-y-0 left-0 z-50 w-72 md:w-64 bg-[#f9f9f9] dark:bg-[#171717] flex flex-col justify-between border-r border-zinc-200 dark:border-zinc-800 transform -translate-x-full md:relative md:translate-x-0 transition-all duration-300 ease-in-out shrink-0"
     >
       <div class="p-3 flex flex-col h-full relative">
         <!-- Brand Header -->
@@ -284,14 +263,14 @@
             <button
               id="new-chat-top-btn"
               title="New Chat"
-              class="p-2 hover:bg-lightHover dark:hover:bg-darkHover rounded-lg text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-white transition"
+              class="p-2 hover:bg-zinc-200 dark:hover:bg-zinc-800 rounded-lg text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-white transition cursor-pointer"
             >
               <i data-feather="edit" class="w-4 h-4"></i>
             </button>
             <button
               id="close-sidebar-btn"
               title="Close Sidebar"
-              class="p-2 hover:bg-lightHover dark:hover:bg-darkHover rounded-lg text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-white md:hidden transition"
+              class="p-2 hover:bg-zinc-200 dark:hover:bg-zinc-800 rounded-lg text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-white md:hidden transition cursor-pointer"
             >
               <i data-feather="x" class="w-5 h-5"></i>
             </button>
@@ -301,7 +280,7 @@
         <!-- New Chat Button -->
         <button
           id="new-chat-btn"
-          class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm bg-zinc-200 dark:bg-zinc-800/80 hover:bg-zinc-300 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-100 transition mb-3 border border-zinc-300 dark:border-zinc-700/60 w-full text-left font-medium shadow-sm"
+          class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm bg-zinc-200 dark:bg-zinc-800/80 hover:bg-zinc-300 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-100 transition mb-3 border border-zinc-300 dark:border-zinc-700/60 w-full text-left font-medium shadow-sm cursor-pointer"
         >
           <i
             data-feather="plus"
@@ -324,25 +303,25 @@
           class="flex-1 overflow-y-auto space-y-1 py-1 text-sm text-zinc-700 dark:text-zinc-300"
         ></div>
 
-        <!-- User Profile Section -->
+        <!-- Guest Account Section -->
         <div
           id="profile-dropdown-container"
           class="relative pt-2 border-t border-zinc-200 dark:border-zinc-800 mt-auto"
         >
           <div
             id="profile-btn"
-            class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-lightHover dark:hover:bg-darkHover cursor-pointer transition select-none"
+            class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-zinc-200 dark:hover:bg-zinc-800 cursor-pointer transition select-none"
           >
             <div
               class="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center font-bold text-xs text-white"
             >
-              U
+              G
             </div>
             <div class="flex-1 truncate">
               <p
                 class="text-sm font-medium text-zinc-800 dark:text-white truncate"
               >
-                User Account
+                Guest
               </p>
             </div>
             <i
@@ -351,64 +330,42 @@
             ></i>
           </div>
 
+          <!-- Profile Menu with Hover Cursor Pointer -->
           <div
             id="profile-menu"
             class="hidden absolute bottom-14 left-2 right-2 bg-white dark:bg-[#262626] border border-zinc-200 dark:border-zinc-700/80 rounded-2xl shadow-2xl p-1.5 space-y-0.5 z-50"
           >
             <button
               id="open-personalization-btn"
-              class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-700/60 text-xs font-medium text-zinc-800 dark:text-zinc-200 transition"
+              class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-700/60 text-xs font-medium text-zinc-700 dark:text-zinc-200 transition cursor-pointer"
             >
               <i data-feather="sliders" class="w-4 h-4 text-zinc-400"></i>
               <span data-i18n="personalization">Personalization</span>
             </button>
             <button
-              id="open-profile-btn"
-              class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-700/60 text-xs font-medium text-zinc-800 dark:text-zinc-200 transition"
-            >
-              <i data-feather="user" class="w-4 h-4 text-zinc-400"></i>
-              <span data-i18n="profile">Profile</span>
-            </button>
-            <button
               id="open-settings-btn"
-              class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-700/60 text-xs font-medium text-zinc-800 dark:text-zinc-200 transition"
+              class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-700/60 text-xs font-medium text-zinc-700 dark:text-zinc-200 transition cursor-pointer"
             >
               <i data-feather="settings" class="w-4 h-4 text-zinc-400"></i>
               <span data-i18n="settings">Settings</span>
-            </button>
-            <div
-              class="border-t border-zinc-200 dark:border-zinc-700 my-1"
-            ></div>
-            <button
-              id="open-help-btn"
-              class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-700/60 text-xs font-medium text-zinc-800 dark:text-zinc-200 transition"
-            >
-              <div class="flex items-center gap-3">
-                <i data-feather="help-circle" class="w-4 h-4 text-zinc-400"></i>
-                <span data-i18n="help">Help</span>
-              </div>
-              <i
-                data-feather="chevron-right"
-                class="w-3.5 h-3.5 text-zinc-400"
-              ></i>
             </button>
           </div>
         </div>
       </div>
     </aside>
 
-    <!-- Main Chat Workspace -->
-    <main
-      class="flex-1 flex flex-col h-full w-full relative overflow-hidden bg-lightBg dark:bg-darkBg"
+    <!-- Main Workspace -->
+    <div
+      class="flex-1 flex flex-col h-full overflow-hidden relative bg-white dark:bg-[#212121]"
     >
       <!-- Top Header -->
       <header
-        class="h-14 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between px-3 md:px-4 bg-lightBg/90 dark:bg-darkBg/90 backdrop-blur z-20 shrink-0"
+        class="h-14 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between px-3 md:px-4 bg-white/90 dark:bg-[#212121]/90 backdrop-blur z-20 shrink-0"
       >
         <div class="flex items-center gap-1.5 md:gap-2">
           <button
             id="toggle-sidebar"
-            class="p-2 hover:bg-lightHover dark:hover:bg-darkHover rounded-lg text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-white transition"
+            class="p-2 hover:bg-zinc-200 dark:hover:bg-zinc-800 rounded-lg text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-white transition cursor-pointer"
             title="Toggle Sidebar"
           >
             <i data-feather="menu" class="w-5 h-5 md:hidden"></i>
@@ -418,7 +375,7 @@
           <div id="model-dropdown-container" class="relative">
             <button
               id="model-btn"
-              class="font-semibold text-zinc-800 dark:text-zinc-200 text-sm flex items-center gap-1.5 cursor-pointer hover:bg-lightHover dark:hover:bg-darkHover px-2.5 py-1.5 rounded-lg transition select-none"
+              class="font-semibold text-zinc-800 dark:text-zinc-200 text-sm flex items-center gap-1.5 cursor-pointer hover:bg-zinc-200 dark:hover:bg-zinc-800 px-2.5 py-1.5 rounded-lg transition select-none"
             >
               <span id="current-model-label">qwen3.6-27b</span>
               <span
@@ -442,21 +399,21 @@
         <div class="flex items-center gap-2">
           <button
             id="quick-settings-btn"
-            class="p-2 hover:bg-lightHover dark:hover:bg-darkHover rounded-lg text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-white transition"
+            class="p-2 hover:bg-zinc-200 dark:hover:bg-zinc-800 rounded-lg text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-white transition cursor-pointer"
             title="Settings"
           >
             <i data-feather="settings" class="w-4 h-4"></i>
           </button>
           <button
             id="mobile-new-chat-btn"
-            class="p-2 hover:bg-lightHover dark:hover:bg-darkHover rounded-lg text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-white md:hidden transition"
+            class="p-2 hover:bg-zinc-200 dark:hover:bg-zinc-800 rounded-lg text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-white md:hidden transition cursor-pointer"
           >
             <i data-feather="edit" class="w-4 h-4"></i>
           </button>
         </div>
       </header>
 
-      <!-- Chat Area Wrapper (Flex column taking remaining height) -->
+      <!-- Chat Stream & Input Area -->
       <div class="flex-1 flex flex-col h-full overflow-hidden relative">
         <!-- Scrollable Message Stream -->
         <div id="chat-stream" class="flex-1 overflow-y-auto px-4">
@@ -490,7 +447,7 @@
               class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 w-full text-left"
             >
               <button
-                class="prompt-chip p-3 rounded-2xl border border-zinc-200 dark:border-zinc-700/60 bg-lightInput dark:bg-darkInput/40 hover:bg-lightHover dark:hover:bg-darkInput transition text-xs text-zinc-700 dark:text-zinc-300"
+                class="prompt-chip p-3 rounded-2xl border border-zinc-200 dark:border-zinc-700/60 bg-zinc-100 dark:bg-zinc-800/40 hover:bg-zinc-200 dark:hover:bg-zinc-800 transition text-xs text-zinc-700 dark:text-zinc-300 cursor-pointer"
               >
                 <span
                   class="font-medium text-zinc-900 dark:text-zinc-100 block mb-1"
@@ -499,7 +456,7 @@
                 Create a modern responsive calculator with HTML, CSS, and JS
               </button>
               <button
-                class="prompt-chip p-3 rounded-2xl border border-zinc-200 dark:border-zinc-700/60 bg-lightInput dark:bg-darkInput/40 hover:bg-lightHover dark:hover:bg-darkInput transition text-xs text-zinc-700 dark:text-zinc-300"
+                class="prompt-chip p-3 rounded-2xl border border-zinc-200 dark:border-zinc-700/60 bg-zinc-100 dark:bg-zinc-800/40 hover:bg-zinc-200 dark:hover:bg-zinc-800 transition text-xs text-zinc-700 dark:text-zinc-300 cursor-pointer"
               >
                 <span
                   class="font-medium text-zinc-900 dark:text-zinc-100 block mb-1"
@@ -517,13 +474,13 @@
           ></div>
         </div>
 
-        <!-- Fixed Bottom Input Bar (Shrink-0 ensures it never collapses on mobile keyboards) -->
+        <!-- Fixed Bottom Input Bar -->
         <footer
-          class="w-full max-w-2xl mx-auto px-3 md:px-4 pb-3 md:pb-4 shrink-0 bg-lightBg dark:bg-darkBg"
+          class="w-full max-w-2xl mx-auto px-3 md:px-4 pb-3 md:pb-4 shrink-0 bg-white dark:bg-[#212121]"
         >
           <form
             id="chat-form"
-            class="flex items-center gap-2 bg-lightInput dark:bg-darkInput rounded-3xl border border-zinc-300 dark:border-zinc-700/60 focus-within:border-zinc-400 dark:focus-within:border-zinc-500 shadow-sm dark:shadow-lg px-3.5 py-2 transition min-h-[48px]"
+            class="flex items-center gap-2 bg-zinc-100 dark:bg-[#2f2f2f] rounded-3xl border border-zinc-300 dark:border-zinc-700/60 focus-within:border-zinc-400 dark:focus-within:border-zinc-500 shadow-sm dark:shadow-lg px-3.5 py-2 transition min-h-[48px]"
           >
             <textarea
               id="user-input"
@@ -536,7 +493,7 @@
             <button
               type="button"
               id="clear-input-btn"
-              class="hidden p-1 hover:text-zinc-800 dark:hover:text-zinc-100 text-zinc-400 transition my-auto"
+              class="hidden p-1 hover:text-zinc-800 dark:hover:text-zinc-100 text-zinc-400 transition my-auto cursor-pointer"
               title="Clear input"
             >
               <i data-feather="x" class="w-4 h-4"></i>
@@ -546,7 +503,7 @@
               type="submit"
               id="send-btn"
               disabled
-              class="w-8 h-8 rounded-full bg-black dark:bg-white disabled:bg-zinc-300 dark:disabled:bg-zinc-600 text-white dark:text-black disabled:text-zinc-500 dark:disabled:text-zinc-400 flex items-center justify-center shrink-0 transition disabled:cursor-not-allowed my-auto"
+              class="w-8 h-8 rounded-full bg-black dark:bg-white disabled:bg-zinc-300 dark:disabled:bg-zinc-600 text-white dark:text-black disabled:text-zinc-500 dark:disabled:text-zinc-400 flex items-center justify-center shrink-0 transition disabled:cursor-not-allowed my-auto cursor-pointer"
             >
               <i data-feather="arrow-up" class="w-4 h-4"></i>
             </button>
@@ -559,12 +516,12 @@
           </p>
         </footer>
       </div>
-    </main>
+    </div>
 
     <!-- Live Browser Preview Modal -->
     <div
       id="live-preview-modal"
-      class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-3 md:p-6 hidden backdrop-blur-md"
+      class="modal-backdrop fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-3 md:p-6 hidden backdrop-blur-md"
     >
       <div
         class="bg-[#18181b] border border-zinc-700 rounded-2xl w-full max-w-5xl h-[90vh] overflow-hidden shadow-2xl flex flex-col"
@@ -585,13 +542,13 @@
           <div class="flex items-center gap-2">
             <button
               id="refresh-preview-btn"
-              class="px-2.5 py-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs rounded-lg flex items-center gap-1 transition"
+              class="px-2.5 py-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs rounded-lg flex items-center gap-1 transition cursor-pointer"
             >
               <i data-feather="refresh-cw" class="w-3 h-3"></i>
               <span>Refresh</span>
             </button>
             <button
-              class="close-modal-btn p-1.5 hover:bg-zinc-800 rounded-lg text-zinc-400 hover:text-white transition"
+              class="close-modal-btn p-1.5 hover:bg-zinc-800 rounded-lg text-zinc-400 hover:text-white transition cursor-pointer"
             >
               <i data-feather="x" class="w-4 h-4"></i>
             </button>
@@ -607,10 +564,10 @@
       </div>
     </div>
 
-    <!-- Settings Modal -->
+    <!-- Settings Modal (Includes Language Switcher) -->
     <div
       id="settings-modal"
-      class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 hidden backdrop-blur-sm"
+      class="modal-backdrop fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 hidden backdrop-blur-sm"
     >
       <div
         class="bg-white dark:bg-[#262626] border border-zinc-200 dark:border-zinc-700 rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl flex flex-col"
@@ -621,7 +578,7 @@
           <h2 class="text-base font-semibold" data-i18n="settings">Settings</h2>
           <button
             id="close-settings-btn"
-            class="p-1 hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded-lg text-zinc-400 hover:text-zinc-800 dark:hover:text-white transition"
+            class="p-1 hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded-lg text-zinc-400 hover:text-zinc-800 dark:hover:text-white transition cursor-pointer"
           >
             <i data-feather="x" class="w-5 h-5"></i>
           </button>
@@ -656,6 +613,7 @@
 
           <div class="border-t border-zinc-200 dark:border-zinc-700/60"></div>
 
+          <!-- Language Switcher Restored -->
           <div class="flex items-center justify-between gap-4">
             <div>
               <label
@@ -700,7 +658,7 @@
             </div>
             <button
               id="clear-all-chats-btn"
-              class="w-20 py-2 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white text-xs font-semibold rounded-xl transition"
+              class="w-20 py-2 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white text-xs font-semibold rounded-xl transition cursor-pointer"
               data-i18n="clear"
             >
               Clear
@@ -713,7 +671,7 @@
         >
           <button
             id="done-settings-btn"
-            class="px-5 py-2 bg-black dark:bg-white text-white dark:text-black text-xs font-semibold rounded-xl hover:opacity-90 transition"
+            class="px-5 py-2 bg-black dark:bg-white text-white dark:text-black text-xs font-semibold rounded-xl hover:opacity-90 transition cursor-pointer"
             data-i18n="done"
           >
             Done
@@ -725,7 +683,7 @@
     <!-- Personalization Modal -->
     <div
       id="personalization-modal"
-      class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 hidden backdrop-blur-sm"
+      class="modal-backdrop fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 hidden backdrop-blur-sm"
     >
       <div
         class="bg-white dark:bg-[#262626] border border-zinc-200 dark:border-zinc-700 rounded-2xl w-full max-w-lg p-6 shadow-2xl space-y-4"
@@ -740,7 +698,7 @@
             Personalization
           </h3>
           <button
-            class="close-modal-btn text-zinc-400 hover:text-zinc-800 dark:hover:text-white"
+            class="close-modal-btn text-zinc-400 hover:text-zinc-800 dark:hover:text-white cursor-pointer"
           >
             <i data-feather="x" class="w-4 h-4"></i>
           </button>
@@ -760,14 +718,14 @@
         </div>
         <div class="flex justify-end gap-2 text-xs pt-2">
           <button
-            class="close-modal-btn px-4 py-2 rounded-xl bg-zinc-200 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-300"
+            class="close-modal-btn px-4 py-2 rounded-xl bg-zinc-200 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-300 cursor-pointer"
             data-i18n="cancel"
           >
             Cancel
           </button>
           <button
             id="save-personalization-btn"
-            class="px-4 py-2 rounded-xl bg-black dark:bg-white text-white dark:text-black font-semibold"
+            class="px-4 py-2 rounded-xl bg-black dark:bg-white text-white dark:text-black font-semibold cursor-pointer"
             data-i18n="save"
           >
             Save
@@ -776,113 +734,10 @@
       </div>
     </div>
 
-    <!-- Profile Modal -->
-    <div
-      id="profile-modal"
-      class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 hidden backdrop-blur-sm"
-    >
-      <div
-        class="bg-white dark:bg-[#262626] border border-zinc-200 dark:border-zinc-700 rounded-2xl w-full max-w-md p-6 shadow-2xl space-y-4"
-      >
-        <div
-          class="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-700 pb-3"
-        >
-          <h3
-            class="text-sm font-semibold text-zinc-800 dark:text-zinc-100"
-            data-i18n="profile"
-          >
-            User Profile
-          </h3>
-          <button
-            class="close-modal-btn text-zinc-400 hover:text-zinc-800 dark:hover:text-white"
-          >
-            <i data-feather="x" class="w-4 h-4"></i>
-          </button>
-        </div>
-        <div class="flex items-center gap-4 py-2">
-          <div
-            class="w-14 h-14 rounded-full bg-emerald-600 flex items-center justify-center font-bold text-lg text-white"
-          >
-            U
-          </div>
-          <div>
-            <h4 class="text-sm font-semibold text-zinc-800 dark:text-zinc-100">
-              User Account
-            </h4>
-            <p class="text-xs text-zinc-500">user@example.com</p>
-            <span
-              class="inline-block mt-1 bg-emerald-500/10 text-emerald-500 text-[10px] px-2 py-0.5 rounded-md font-medium"
-              >Standard License</span
-            >
-          </div>
-        </div>
-        <div class="flex justify-end text-xs pt-2">
-          <button
-            class="close-modal-btn px-4 py-2 rounded-xl bg-black dark:bg-white text-white dark:text-black font-semibold"
-            data-i18n="done"
-          >
-            Close
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Help Modal -->
-    <div
-      id="help-modal"
-      class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 hidden backdrop-blur-sm"
-    >
-      <div
-        class="bg-white dark:bg-[#262626] border border-zinc-200 dark:border-zinc-700 rounded-2xl w-full max-w-md p-6 shadow-2xl space-y-4"
-      >
-        <div
-          class="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-700 pb-3"
-        >
-          <h3
-            class="text-sm font-semibold text-zinc-800 dark:text-zinc-100"
-            data-i18n="help"
-          >
-            Help & Support
-          </h3>
-          <button
-            class="close-modal-btn text-zinc-400 hover:text-zinc-800 dark:hover:text-white"
-          >
-            <i data-feather="x" class="w-4 h-4"></i>
-          </button>
-        </div>
-        <div class="space-y-2 text-xs text-zinc-700 dark:text-zinc-300">
-          <p
-            class="p-2.5 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-700/50 cursor-pointer flex items-center justify-between"
-          >
-            <span>Documentation & Guide</span>
-            <i
-              data-feather="external-link"
-              class="w-3.5 h-3.5 text-zinc-400"
-            ></i>
-          </p>
-          <p
-            class="p-2.5 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-700/50 cursor-pointer flex items-center justify-between"
-          >
-            <span>Keyboard Shortcuts</span>
-            <span class="text-zinc-500 font-mono">Enter to Send</span>
-          </p>
-          <p
-            class="p-2.5 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-700/50 cursor-pointer flex items-center justify-between"
-          >
-            <span>Terms & Privacy</span>
-            <i
-              data-feather="external-link"
-              class="w-3.5 h-3.5 text-zinc-400"
-            ></i>
-          </p>
-        </div>
-      </div>
-    </div>
-
     <!-- Rename Chat Modal -->
     <div
       id="rename-modal"
-      class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 hidden backdrop-blur-sm"
+      class="modal-backdrop fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 hidden backdrop-blur-sm"
     >
       <div
         class="bg-white dark:bg-[#262626] border border-zinc-200 dark:border-zinc-700 rounded-2xl w-full max-w-md p-5 shadow-2xl space-y-4"
@@ -901,14 +756,14 @@
         <div class="flex justify-end gap-2 text-xs">
           <button
             id="cancel-rename-btn"
-            class="px-4 py-2 rounded-lg bg-zinc-200 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-300"
+            class="px-4 py-2 rounded-lg bg-zinc-200 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-300 cursor-pointer"
             data-i18n="cancel"
           >
             Cancel
           </button>
           <button
             id="save-rename-btn"
-            class="px-4 py-2 rounded-lg bg-black dark:bg-white text-white dark:text-black font-semibold"
+            class="px-4 py-2 rounded-lg bg-black dark:bg-white text-white dark:text-black font-semibold cursor-pointer"
             data-i18n="save"
           >
             Save
@@ -927,7 +782,7 @@
           gfm: true,
         });
 
-        const STORAGE_KEY = "omnimind_ai_v16_chats";
+        const STORAGE_KEY = "omnimind_ai_v19_chats";
 
         let currentModel = "qwen/qwen3.6-27b";
         let currentTheme = localStorage.getItem("omnimind_theme") || "dark";
@@ -953,9 +808,7 @@
             new_chat: "New chat",
             conversations: "Conversations",
             personalization: "Personalization",
-            profile: "Profile",
             settings: "Settings",
-            help: "Help",
             hero_title: "What can I help with today?",
             input_placeholder: "Message OmniMind...",
             disclaimer:
@@ -977,9 +830,7 @@
             new_chat: "புதிய அரட்டை",
             conversations: "உரையாடல்கள்",
             personalization: "தனிப்பயனாக்கம் (Personalization)",
-            profile: "சுயவிவரம் (Profile)",
             settings: "அமைப்புகள் (Settings)",
-            help: "உதவி (Help)",
             hero_title: "இன்று நான் உங்களுக்கு எவ்வாறு உதவ முடியும்?",
             input_placeholder: "OmniMind-க்கு செய்தி அனுப்பவும்...",
             disclaimer:
@@ -998,6 +849,73 @@
             save: "சேமி",
             rename_chat: "பெயரை மாற்றவும்",
             no_chats: "உரையாடல்கள் எதுவும் இல்லை.",
+          },
+          es: {
+            new_chat: "Nuevo chat",
+            conversations: "Conversaciones",
+            personalization: "Personalización",
+            settings: "Configuración",
+            hero_title: "¿En qué puedo ayudarte hoy?",
+            input_placeholder: "Enviar mensaje a OmniMind...",
+            disclaimer:
+              "OmniMind AI puede cometer errores. Verifica la información importante.",
+            theme: "Tema",
+            theme_desc: "Cambia entre modo claro y oscuro",
+            language: "Idioma",
+            language_desc: "Selecciona el idioma de la interfaz",
+            clear_chats: "Borrar todos los chats",
+            clear_chats_desc: "Elimina de forma permanente todo el historial",
+            clear: "Borrar",
+            done: "Listo",
+            cancel: "Cancelar",
+            save: "Guardar",
+            rename_chat: "Renombrar conversación",
+            no_chats: "No hay conversaciones aún.",
+          },
+          fr: {
+            new_chat: "Nouvelle discussion",
+            conversations: "Conversations",
+            personalization: "Personnalisation",
+            settings: "Paramètres",
+            hero_title: "Comment puis-je vous aider aujourd'hui ?",
+            input_placeholder: "Envoyer un message à OmniMind...",
+            disclaimer:
+              "OmniMind AI peut faire des erreurs. Vérifiez les informations.",
+            theme: "Thème",
+            theme_desc: "Basculez entre le mode clair et sombre",
+            language: "Langue",
+            language_desc: "Choisissez la langue de l'interface",
+            clear_chats: "Effacer toutes les discussions",
+            clear_chats_desc: "Supprime définitivement tous les historiques",
+            clear: "Effacer",
+            done: "Terminé",
+            cancel: "Annuler",
+            save: "Enregistrer",
+            rename_chat: "Renommer la conversation",
+            no_chats: "Aucune conversation pour le moment.",
+          },
+          de: {
+            new_chat: "Neuer Chat",
+            conversations: "Unterhaltungen",
+            personalization: "Personalisierung",
+            settings: "Einstellungen",
+            hero_title: "Wie kann ich dir heute helfen?",
+            input_placeholder: "Nachricht an OmniMind...",
+            disclaimer:
+              "OmniMind AI kann Fehler machen. Überprüfen Sie wichtige Infos.",
+            theme: "Erscheinungsbild",
+            theme_desc: "Zwischen Hell- und Dunkelmodus wechseln",
+            language: "Sprache",
+            language_desc: "Wählen Sie Ihre bevorzugte Sprache",
+            clear_chats: "Alle Chats löschen",
+            clear_chats_desc:
+              "Gesamten Gesprächsverlauf unwiderruflich löschen",
+            clear: "Löschen",
+            done: "Fertig",
+            cancel: "Abbrechen",
+            save: "Speichern",
+            rename_chat: "Unterhaltung umbenennen",
+            no_chats: "Noch keine Unterhaltungen.",
           },
         };
 
@@ -1237,21 +1155,21 @@
                 <span class="chat-title truncate">${escapeHtml(chat.title)}</span>
               </div>
 
-              <button class="chat-item-menu-btn opacity-0 group-hover:opacity-100 p-1 rounded-md hover:bg-zinc-300 dark:hover:bg-zinc-700 text-zinc-400 hover:text-zinc-800 dark:hover:text-white transition shrink-0" title="Options">
+              <button class="chat-item-menu-btn opacity-0 group-hover:opacity-100 p-1 rounded-md hover:bg-zinc-300 dark:hover:bg-zinc-700 text-zinc-400 hover:text-zinc-800 dark:hover:text-white transition shrink-0 cursor-pointer" title="Options">
                 <i data-feather="more-horizontal" class="w-3.5 h-3.5"></i>
               </button>
 
               <div class="chat-item-menu hidden absolute right-2 top-10 w-36 bg-white dark:bg-[#262626] border border-zinc-200 dark:border-zinc-700 rounded-xl shadow-2xl p-1 z-30 space-y-0.5">
-                <button class="pin-chat-action w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-700 text-xs text-zinc-700 dark:text-zinc-200">
+                <button class="pin-chat-action w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-700 text-xs text-zinc-700 dark:text-zinc-200 cursor-pointer">
                   <i data-feather="pin" class="w-3 h-3 text-amber-500"></i>
                   <span>${chat.pinned ? "Unpin" : "Pin"}</span>
                 </button>
-                <button class="rename-chat-action w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-700 text-xs text-zinc-700 dark:text-zinc-200">
+                <button class="rename-chat-action w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-700 text-xs text-zinc-700 dark:text-zinc-200 cursor-pointer">
                   <i data-feather="edit-2" class="w-3 h-3"></i>
                   <span>Rename</span>
                 </button>
                 <div class="border-t border-zinc-200 dark:border-zinc-700 my-0.5"></div>
-                <button class="delete-chat-action w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg hover:bg-red-500/10 text-xs text-red-500">
+                <button class="delete-chat-action w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg hover:bg-red-500/10 text-xs text-red-500 cursor-pointer">
                   <i data-feather="trash-2" class="w-3 h-3"></i>
                   <span>Delete</span>
                 </button>
@@ -1444,12 +1362,6 @@
           $("#personalization-modal").addClass("hidden");
         });
 
-        $("#open-profile-btn").on("click", function (e) {
-          e.stopPropagation();
-          $("#profile-menu").addClass("hidden");
-          $("#profile-modal").removeClass("hidden");
-        });
-
         $("#open-settings-btn, #quick-settings-btn").on("click", function (e) {
           e.stopPropagation();
           $("#profile-menu").addClass("hidden");
@@ -1460,10 +1372,11 @@
           $("#settings-modal").addClass("hidden");
         });
 
-        $("#open-help-btn").on("click", function (e) {
-          e.stopPropagation();
-          $("#profile-menu").addClass("hidden");
-          $("#help-modal").removeClass("hidden");
+        // Close modal when clicking outside (on the modal backdrop)
+        $(document).on("click", ".modal-backdrop", function (e) {
+          if ($(e.target).is(this)) {
+            $(this).addClass("hidden");
+          }
         });
 
         $(".close-modal-btn").on("click", function () {
@@ -1496,7 +1409,7 @@
               const displayName = modelName.split("/")[1] || modelName;
 
               const itemHtml = `
-              <button class="model-option w-full flex items-start justify-between p-2.5 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-700/60 text-left transition" data-model="${modelName}">
+              <button class="model-option w-full flex items-start justify-between p-2.5 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-700/60 text-left transition cursor-pointer" data-model="${modelName}">
                 <div>
                   <p class="text-xs font-semibold text-zinc-800 dark:text-zinc-100">${displayName}</p>
                   <p class="text-[10px] text-emerald-500 font-medium">${modelName}</p>
@@ -1562,7 +1475,6 @@
             const newChat = {
               id: "chat-" + Date.now(),
               title: inputVal.slice(0, 24) + "...",
-              pinned: false,
               createdAt: Date.now(),
               messages: [],
             };
@@ -1681,8 +1593,8 @@
             <div class="message-group flex flex-col items-end group/user mb-4" data-msg-id="${msgId}">
               <div class="msg-text-content w-fit max-w-[85%] bg-zinc-200 dark:bg-[#2f2f2f] text-zinc-900 dark:text-zinc-100 px-4 py-2 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap break-words">${escapeHtml(content.trim())}</div>
               <div class="flex items-center gap-1.5 mt-1 opacity-0 group-hover/user:opacity-100 transition text-zinc-400 text-xs pr-1">
-                <button class="copy-msg-btn p-1 hover:text-zinc-800 dark:hover:text-white" title="Copy prompt"><i data-feather="copy" class="w-3 h-3"></i></button>
-                <button class="delete-msg-btn p-1 hover:text-red-500" title="Delete prompt"><i data-feather="trash-2" class="w-3 h-3"></i></button>
+                <button class="copy-msg-btn p-1 hover:text-zinc-800 dark:hover:text-white cursor-pointer" title="Copy prompt"><i data-feather="copy" class="w-3 h-3"></i></button>
+                <button class="delete-msg-btn p-1 hover:text-red-500 cursor-pointer" title="Delete prompt"><i data-feather="trash-2" class="w-3 h-3"></i></button>
               </div>
             </div>
           `;
@@ -1699,13 +1611,13 @@
               <div class="flex-1 space-y-1.5 overflow-hidden">
                 <div class="msg-ai-body pt-0.5 leading-relaxed break-words">${formattedContent}</div>
                 <div class="flex items-center gap-2 pt-1 text-zinc-400 text-xs">
-                  <button class="copy-msg-btn p-1.5 hover:bg-zinc-200 dark:hover:bg-zinc-800 hover:text-zinc-800 dark:hover:text-zinc-200 rounded-lg transition" title="Copy response">
+                  <button class="copy-msg-btn p-1.5 hover:bg-zinc-200 dark:hover:bg-zinc-800 hover:text-zinc-800 dark:hover:text-zinc-200 rounded-lg transition cursor-pointer" title="Copy response">
                     <i data-feather="copy" class="w-3.5 h-3.5"></i>
                   </button>
-                  <button class="like-btn p-1.5 hover:bg-zinc-200 dark:hover:bg-zinc-800 hover:text-emerald-500 rounded-lg transition ${likeClass}" title="Good response">
+                  <button class="like-btn p-1.5 hover:bg-zinc-200 dark:hover:bg-zinc-800 hover:text-emerald-500 rounded-lg transition ${likeClass} cursor-pointer" title="Good response">
                     <i data-feather="thumbs-up" class="w-3.5 h-3.5"></i>
                   </button>
-                  <button class="dislike-btn p-1.5 hover:bg-zinc-200 dark:hover:bg-zinc-800 hover:text-red-500 rounded-lg transition ${dislikeClass}" title="Bad response">
+                  <button class="dislike-btn p-1.5 hover:bg-zinc-200 dark:hover:bg-zinc-800 hover:text-red-500 rounded-lg transition ${dislikeClass} cursor-pointer" title="Bad response">
                     <i data-feather="thumbs-down" class="w-3.5 h-3.5"></i>
                   </button>
                 </div>
