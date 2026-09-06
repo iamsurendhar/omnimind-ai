@@ -142,7 +142,7 @@ omnimind-ai/
 ### Step 1: Clone the Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/omnimind-ai.git
+git clone https://github.com/iamsurendhar/omnimind-ai.git
 cd omnimind-ai
 ```
 
